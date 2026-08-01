@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Learnix — Teacher Dashboard</title>
+<style>
+  :root{
+    --purple:#6C4DF6;
+    --purple-dark:#5936E0;
+    --purple-soft:#EFEBFE;
+    --ink:#151726;
+    --gray:#6B7280;
+    --gray-light:#9AA0AC;
+    --border:#EDEBF7;
+    --bg:#F7F6FC;
+    --panel:#FFFFFF;
+    --green:#22B573;
+    --amber:#F5B93E;
+    --teal:#59D6C4;
+    --coral:#F0666B;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+
+  body{
+    font-family:'Poppins-fallback','Segoe UI',system-ui,-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  button{ font-family:inherit; }
+
+  .app{
+    display:grid;
+    grid-template-columns: 250px 1fr;
+    min-height:100vh;
+  }
+
+  /* ================= SIDEBAR ================= */
+  .sidebar{
+    background:var(--panel);
+    border-right:1px solid var(--border);
+    padding:26px 18px;
+    display:flex;
+    flex-direction:column;
+    position:sticky;
+    top:0;
+    height:100vh;
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    padding:0 8px;
+    margin-bottom:34px;
+  }
+  .brand .mark{
+    width:38px; height:38px;
+    border-radius:11px;
+    background:var(--purple);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .brand .mark svg{ width:20px; height:20px; }
+  .brand span{ font-size:18px; font-weight:700; }
+
+  .nav-group{ margin-bottom:22px; }
+  .nav-label{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.6px;
+    color:var(--gray-light);
+    text-transform:uppercase;
+    padding:0 12px;
+    margin-bottom:8px;
+  }
+
+  .nav-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:11px 12px;
+    border-radius:10px;
+    font-size:14.5px;
+    font-weight:500;
+    color:var(--gray);
+    cursor:pointer;
+    transition: background .18s ease, color .18s ease;
+    margin-bottom:2px;
+  }
+  .nav-item svg{ width:19px; height:19px; flex-shrink:0; }
+  .nav-item:hover{ background:var(--purple-soft); color:var(--purple); }
+  .nav-item.active{
+    background:var(--purple);
+    color:#fff;
+    box-shadow:0 10px 20px -10px rgba(108,77,246,.6);
+  }
+
+  .sidebar-foot{ margin-top:auto; }
+
+  /* ================= MAIN ================= */
+  .main{ padding:30px 40px 60px; max-width:1400px; }
+
+  .topbar{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    margin-bottom:30px;
+    flex-wrap:wrap;
+    gap:16px;
+    opacity:0;
+    animation: riseIn .5s ease forwards .05s;
+  }
+
+  .greeting h1{
+    font-size:24px;
+    font-weight:800;
+    letter-spacing:-.3px;
+  }
+  .greeting p{
+    margin-top:4px;
+    font-size:14px;
+    color:var(--gray);
+  }
+
+  .top-actions{ display:flex; align-items:center; gap:14px; }
+
+  .create-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--purple);
+    color:#fff;
+    border:none;
+    font-size:14px;
+    font-weight:600;
+    padding:11px 20px;
+    border-radius:11px;
+    cursor:pointer;
+    box-shadow:0 12px 22px -10px rgba(108,77,246,.55);
+    transition: transform .18s ease, background .18s ease;
+  }
+  .create-btn:hover{ background:var(--purple-dark); transform:translateY(-1px); }
+  .create-btn svg{ width:16px; height:16px; }
+
+  .icon-btn{
+    position:relative;
+    width:42px; height:42px;
+    border-radius:11px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    color:var(--gray);
+    transition: border-color .18s ease, color .18s ease;
+  }
+  .icon-btn:hover{ border-color:var(--purple); color:var(--purple); }
+  .icon-btn svg{ width:19px; height:19px; }
+  .dot-badge{
+    position:absolute; top:8px; right:9px;
+    width:8px; height:8px;
+    border-radius:50%;
+    background:var(--coral);
+    border:2px solid var(--panel);
+  }
+
+  .avatar{
+    width:42px; height:42px;
+    border-radius:11px;
+    background:linear-gradient(135deg,#8674E8,var(--purple));
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700;
+    font-size:14px;
+    cursor:pointer;
+  }
+
+  /* ---------- stat cards ---------- */
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:20px;
+    margin-bottom:28px;
+  }
+
+  .stat-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:20px;
+    opacity:0;
+    animation: riseIn .5s ease forwards;
+  }
+  .stat-card:nth-child(1){ animation-delay:.12s; }
+  .stat-card:nth-child(2){ animation-delay:.18s; }
+  .stat-card:nth-child(3){ animation-delay:.24s; }
+  .stat-card:nth-child(4){ animation-delay:.3s; }
+
+  .stat-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .stat-icon{
+    width:38px; height:38px;
+    border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .stat-icon svg{ width:19px; height:19px; }
+  .stat-icon.purple{ background:var(--purple-soft); color:var(--purple); }
+  .stat-icon.amber{ background:#FDF1DC; color:var(--amber); }
+  .stat-icon.teal{ background:#E4FAF6; color:#1AA894; }
+  .stat-icon.coral{ background:#FCE9EA; color:var(--coral); }
+
+  .stat-card .num{ font-size:28px; font-weight:800; letter-spacing:-.5px; }
+  .stat-card .label{ font-size:13px; color:var(--gray); margin-top:2px; }
+
+  /* ---------- content grid ---------- */
+  .content-grid{
+    display:grid;
+    grid-template-columns: 1.7fr 1fr;
+    gap:22px;
+    align-items:start;
+  }
+
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:22px;
+    opacity:0;
+    animation: riseIn .5s ease forwards .38s;
+  }
+
+  .panel-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .panel-head h2{ font-size:16px; font-weight:700; }
+  .panel-head a{ font-size:13px; font-weight:600; color:var(--purple); }
+  .panel-head a:hover{ text-decoration:underline; }
+
+  .class-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .class-row:last-child{ border-bottom:none; padding-bottom:0; }
+  .class-row:first-child{ padding-top:0; }
+
+  .class-info{ display:flex; align-items:center; gap:14px; }
+  .class-swatch{
+    width:44px; height:44px;
+    border-radius:11px;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700;
+    font-size:14px;
+    color:#fff;
+    flex-shrink:0;
+  }
+  .class-name{ font-size:14.5px; font-weight:600; }
+  .class-meta{ font-size:12.5px; color:var(--gray); margin-top:3px; }
+
+  .class-right{ text-align:right; }
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-size:11.5px;
+    font-weight:700;
+    padding:4px 10px;
+    border-radius:20px;
+  }
+  .badge.live{ background:#E6F8EE; color:var(--green); }
+  .badge.live::before{ content:''; width:6px; height:6px; border-radius:50%; background:var(--green); }
+  .badge.count{ background:var(--purple-soft); color:var(--purple); }
+  .students-count{ font-size:12.5px; color:var(--gray); margin-top:5px; }
+
+  .quick-note{
+    margin-top:22px;
+    background:#FFF9E9;
+    border:1px solid #F5E3AE;
+    border-radius:14px;
+    padding:16px;
+    font-size:13px;
+    color:#8A6D1D;
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+  }
+  .quick-note svg{ width:18px; height:18px; flex-shrink:0; margin-top:1px; }
+  .quick-note strong{ display:block; margin-bottom:2px; font-size:13.5px; }
+
+  .side-panel{ display:flex; flex-direction:column; gap:22px; }
+
+  .upcoming-row{
+    display:flex;
+    gap:12px;
+    padding:12px 0;
+    border-bottom:1px solid var(--border);
+  }
+  .upcoming-row:last-child{ border-bottom:none; padding-bottom:0; }
+  .upcoming-row:first-child{ padding-top:0; }
+  .time-chip{
+    flex-shrink:0;
+    width:52px;
+    text-align:center;
+    font-size:11px;
+    font-weight:700;
+    color:var(--purple);
+    background:var(--purple-soft);
+    border-radius:8px;
+    padding:6px 4px;
+    line-height:1.3;
+  }
+  .upcoming-title{ font-size:13.5px; font-weight:600; }
+  .upcoming-sub{ font-size:12px; color:var(--gray); margin-top:2px; }
+
+  @keyframes riseIn{
+    from{ opacity:0; transform:translateY(12px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  /* ---------- mobile ---------- */
+  .menu-toggle{
+    display:none;
+    width:38px; height:38px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .menu-toggle svg{ width:20px; height:20px; }
+
+  @media (max-width:1080px){
+    .stats{ grid-template-columns:repeat(2, 1fr); }
+    .content-grid{ grid-template-columns:1fr; }
+  }
+
+  @media (max-width:840px){
+    .app{ grid-template-columns:1fr; }
+    .sidebar{
+      position:fixed; z-index:40; left:0; top:0;
+      width:250px;
+      transform:translateX(-100%);
+      transition:transform .25s ease;
+      box-shadow:0 0 0 100vmax rgba(0,0,0,0);
+    }
+    .sidebar.open{ transform:translateX(0); box-shadow:20px 0 60px rgba(21,23,38,.25); }
+    .menu-toggle{ display:flex; }
+    .main{ padding:20px 5vw 50px; }
+    .stats{ grid-template-columns:1fr 1fr; }
+  }
+
+  @media (max-width:520px){
+    .stats{ grid-template-columns:1fr; }
+    .top-actions{ width:100%; justify-content:space-between; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="mark">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3L2 8.5L12 14L22 8.5L12 3Z" fill="white"/>
+          <path d="M6 11.5V16C6 16 8 19 12 19C16 19 18 16 18 16V11.5" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span>Learnix</span>
+    </div>
+
+    <nav class="nav-group" id="mainNav">
+      <div class="nav-item active" data-view="Dashboard">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="3" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="13" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.8"/><rect x="13" y="13" width="8" height="8" rx="2" stroke="currentColor" stroke-width="1.8"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item" data-view="My Classes">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6C4 4.9 4.9 4 6 4H14L20 10V18C20 19.1 19.1 20 18 20H6C4.9 20 4 19.1 4 18V6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 4V10H20" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        My Classes
+      </div>
+      <div class="nav-item" data-view="Whiteboards">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 21L12 17L16 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Whiteboards
+      </div>
+      <div class="nav-item" data-view="Resources" onclick="openResources()">
+  <svg viewBox="0 0 24 24" fill="none"
+       xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 19.5C4 18.1 5.1 17 6.5 17H20V4H6.5C5.1 4 4 5.1 4 6.5V19.5Z"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linejoin="round"/>
+    <path d="M4 19.5C4 20.9 5.1 22 6.5 22H20"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"/>
+  </svg>
+
+  Resources
+</div>
+      <div class="nav-item" data-view="Analytics" onclick="openAnalytics()">
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 20V10M12 20V4M20 20V14"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"/>
+  </svg>
+  Analytics
+</div>
+    </nav>
+
+    <div class="nav-group">
+      <div class="nav-label">Manage</div>
+      <div class="nav-item" data-view="Schedule">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 10H21M8 3V6M16 3V6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Schedule
+      </div>
+      <div class="nav-item" data-view="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 9C18 6 15.5 4 12 4C8.5 4 6 6 6 9C6 15 4 16 4 16H20C20 16 18 15 18 9Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 19C10 20 11 21 12 21C13 21 14 20 14 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Notifications
+      </div>
+      <div class="nav-item" data-view="Settings">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 13.5C19.5 13 19.5 12.5 19.4 12L21 10.5L19.5 8L17.5 8.5C17.1 8.1 16.6 7.8 16.1 7.6L15.5 5.5H12.5L11.9 7.6C11.4 7.8 10.9 8.1 10.5 8.5L8.5 8L7 10.5L8.6 12C8.5 12.5 8.5 13 8.6 13.5L7 15L8.5 17.5L10.5 17C10.9 17.4 11.4 17.7 11.9 17.9L12.5 20H15.5L16.1 17.9C16.6 17.7 17.1 17.4 17.5 17L19.5 17.5L21 15L19.4 13.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        Settings
+      </div>
+      <div class="nav-item" data-view="Settings" onclick="showSettings()"></div>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="nav-item" id="logoutBtn">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        Logout
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN ================= -->
+  <main class="main">
+
+    <div class="topbar">
+      <div style="display:flex; align-items:center; gap:14px;">
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6H21M3 12H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <div class="greeting">
+          <h1 id="welcomeMessage">Welcome back 👋</h1>
+          <p>Here's what's happening today</p>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="create-btn" id="createClassBtn">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5V19M5 12H19" stroke="white" stroke-width="2.3" stroke-linecap="round"/></svg>
+          Create Classroom
+        </button>
+        <button class="icon-btn" id="bellBtn" aria-label="Notifications">
+          <span class="dot-badge"></span>
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18 9C18 6 15.5 4 12 4C8.5 4 6 6 6 9C6 15 4 16 4 16H20C20 16 18 15 18 9Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M10 19C10 20 11 21 12 21C13 21 14 20 14 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+        <div class="avatar" id="avatarBtn">AS</div>
+      </div>
+    </div>
+
+    <!-- ---------- stat cards ---------- -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon purple">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6C4 4.9 4.9 4 6 4H14L20 10V18C20 19.1 19.1 20 18 20H6C4.9 20 4 19.1 4 18V6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="num">12</div>
+        <div class="label">My Classes · Active classes</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon amber">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M8 21L12 17L16 21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <div class="num" id="classCount">0</div>
+        <div class="label">Whiteboards · Total boards</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon teal">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"/><path d="M4 20C4 16.7 7.6 14 12 14C16.4 14 20 16.7 20 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <div class="num">320</div>
+        <div class="label">Students · Total students</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-top">
+          <div class="stat-icon coral">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 10H21M8 3V6M16 3V6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+        </div>
+        <div class="num">3</div>
+        <div class="label">Today's Classes · Upcoming</div>
+      </div>
+    </div>
+
+    <!-- ---------- content grid ---------- -->
+    <div class="content-grid">
+
+      <!-- Recent Classes -->
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Recent Classes</h2>
+          <a href="#">View all</a>
+        </div>
+
+        <div class="class-row">
+          <div class="class-info">
+            <div class="class-swatch" style="background:#6C4DF6;">DN</div>
+            <div>
+              <div class="class-name">DBMS – Normalization</div>
+              <div class="class-meta">Today, 09:00 AM</div>
+            </div>
+          </div>
+          <div class="class-right">
+            <span class="badge live">Live</span>
+            <div class="students-count">40 Students</div>
+          </div>
+        </div>
+
+        <div class="class-row">
+          <div class="class-info">
+            <div class="class-swatch" style="background:#F5B93E;">OS</div>
+            <div>
+              <div class="class-name">Operating Systems</div>
+              <div class="class-meta">Today, 11:30 AM</div>
+            </div>
+          </div>
+          <div class="class-right">
+            <div class="students-count">38 Students</div>
+          </div>
+        </div>
+
+        <div class="class-row">
+          <div class="class-info">
+            <div class="class-swatch" style="background:#63C58B;">ER</div>
+            <div>
+              <div class="class-name">ER Diagram Practice</div>
+              <div class="class-meta">Yesterday, 03:00 PM</div>
+            </div>
+          </div>
+          <div class="class-right">
+            <div class="students-count">36 Students</div>
+          </div>
+        </div>
+
+        <div class="quick-note">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#8A6D1D"><path d="M12 9V13" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="16.5" r="1" fill="#8A6D1D"/><circle cx="12" cy="12" r="9" stroke-width="1.8"/></svg>
+          <div>
+            <strong>Quick Note</strong>
+            Don't forget to share the assignment.
+          </div>
+        </div>
+      </div>
+      <a href="signup.html" class="class-row">
+    Sign Up
+</a>
+
+      <!-- Side panel: Upcoming Classes -->
+      <div class="side-panel">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Upcoming Classes</h2>
+            <a href="#">View all</a>
+          </div>
+
+          <div class="upcoming-row">
+            <div class="time-chip">02:00<br/>PM</div>
+            <div>
+              <div class="upcoming-title">UI/UX Design</div>
+              <div class="upcoming-sub">Today</div>
+            </div>
+          </div>
+
+          <div class="upcoming-row">
+            <div class="time-chip">10:00<br/>AM</div>
+            <div>
+              <div class="upcoming-title">Data Structures</div>
+              <div class="upcoming-sub">Tomorrow</div>
+            </div>
+          </div>
+
+          <div class="upcoming-row">
+            <div class="time-chip">11:00<br/>AM</div>
+            <div>
+              <div class="upcoming-title">UI/UX Workshop</div>
+              <div class="upcoming-sub">Tomorrow</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2>This Week</h2>
+          </div>
+          <div class="upcoming-row">
+            <div class="time-chip" style="background:#E4FAF6; color:#1AA894;">81%</div>
+            <div>
+              <div class="upcoming-title">Avg. Quiz Score</div>
+              <div class="upcoming-sub">Across all classes</div>
+            </div>
+          </div>
+          <div class="upcoming-row">
+            <div class="time-chip" style="background:#FDF1DC; color:#B8860B;">96%</div>
+            <div>
+              <div class="upcoming-title">Attendance</div>
+              <div class="upcoming-sub">Average this week</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // ---- Sidebar nav active state ----
+  const navItems = document.querySelectorAll('#mainNav .nav-item, .sidebar-foot .nav-item');
+  document.querySelectorAll('#mainNav .nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('#mainNav .nav-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      console.log('Navigated to:', item.dataset.view);
+      // Close sidebar on mobile after navigating
+      if (window.innerWidth <= 840) sidebar.classList.remove('open');
+    });
+  });
+
+  // ---- Mobile sidebar toggle ----
+  const sidebar = document.getElementById('sidebar');
+  const menuToggle = document.getElementById('menuToggle');
+  menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 840 &&
+        sidebar.classList.contains('open') &&
+        !sidebar.contains(e.target) &&
+        !menuToggle.contains(e.target)) {
+      sidebar.classList.remove('open');
+    }
+  });
+
+ document.getElementById('createClassBtn').addEventListener('click', () => {
+
+  const code =
+    "LX-" +
+    Math.random().toString(36).substring(2, 5).toUpperCase() +
+    Math.random().toString(36).substring(2, 5).toUpperCase();
+
+  localStorage.setItem("classroomCode", code);
+
+  window.location.href = "s5.html";
+});
+
+  // ---- Notification bell ----
+  document.getElementById('bellBtn').addEventListener('click', () => {
+    console.log('Toggle notifications panel');
+  });
+
+  // ---- Avatar ----
+  document.getElementById('avatarBtn').addEventListener('click', () => {
+    console.log('Open profile menu');
+  });
+
+  // ---- Logout ----
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    console.log('Logging out...');
+    window.location.href = "s3.html?role=teacher";
+});
+
+// ---- Analytics ----
+function openAnalytics() {
+    window.location.href = "s10.html";
+}
+function openResources() {
+    window.location.href = "s13.html";
+}
+function showSettings() {
+    alert("Settings clicked");
+}
+</script>
+
+</body>
+</html>

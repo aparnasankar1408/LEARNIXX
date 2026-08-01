@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learnix — Profile &amp; Settings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo:#5B4FE9;
+    --indigo-dark:#4338CA;
+    --indigo-light:#EEECFE;
+    --ink:#1E1B2E;
+    --ink-soft:#6B6580;
+    --line:#ECEAF4;
+    --bg:#F5F4FB;
+    --card:#FFFFFF;
+    --red:#E9536B;
+    --red-bg:#FDECEF;
+    --purple2:#9B6BFF;
+    --radius-lg:18px;
+    --radius-md:12px;
+    --radius-sm:8px;
+    --shadow:0 2px 10px rgba(30,27,46,0.05), 0 1px 2px rgba(30,27,46,0.04);
+    transition:background .25s, color .25s;
+  }
+  :root.dark{
+    --ink:#F2F0FA;
+    --ink-soft:#9C97B8;
+    --line:#33304A;
+    --bg:#181626;
+    --card:#211E33;
+    --indigo-light:#2C2750;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Inter',sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:100vh;
+    padding:32px;
+    transition:background .25s, color .25s;
+  }
+
+  .screen{
+    width:380px;
+    height:720px;
+    background:var(--card);
+    border-radius:var(--radius-lg);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    transition:background .25s, border-color .25s;
+  }
+  .panel{
+    padding:22px 22px 18px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    overflow-y:auto;
+    height:100%;
+  }
+  .panel::-webkit-scrollbar{width:6px;}
+  .panel::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px;}
+
+  .row-between{display:flex;align-items:center;justify-content:space-between;}
+
+  .brand{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15px;}
+  .brand .logo{
+    width:26px;height:26px;border-radius:8px;
+    background:linear-gradient(135deg,var(--indigo),var(--purple2));
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:14px;
+  }
+
+  .prof-head{display:flex;gap:12px;align-items:center;position:relative;}
+  .prof-avatar{
+    width:52px;height:52px;border-radius:50%;
+    background:linear-gradient(135deg,#FFD86E,#FF9F6E);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:18px;color:#7A4A00;
+    cursor:pointer;
+    position:relative;
+  }
+  .prof-avatar:hover:after{
+    content:"Edit";
+    position:absolute;inset:0;
+    background:rgba(0,0,0,.45);
+    color:#fff;
+    font-size:9.5px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:50%;
+  }
+  .prof-head .n{font-size:15px;font-weight:800;}
+  .prof-head .r{font-size:12px;color:var(--ink-soft);}
+
+  .settings-block{border:1px solid var(--line);border-radius:var(--radius-md);overflow:hidden;}
+  .set-row{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:11px 14px;
+    font-size:13px;
+    border-bottom:1px solid var(--line);
+  }
+  .set-row:last-child{border-bottom:none;}
+  .set-row .lbl{display:flex;align-items:center;gap:10px;font-weight:600;}
+  .set-row .ic{
+    width:26px;height:26px;border-radius:7px;background:var(--indigo-light);
+    display:flex;align-items:center;justify-content:center;color:var(--indigo-dark);font-size:12px;
+    flex-shrink:0;
+  }
+  .set-row .val{color:var(--ink-soft);font-size:12.5px;font-weight:600;}
+
+  .link-btn{color:var(--indigo-dark);font-size:12px;font-weight:700;cursor:pointer;background:none;border:none;font-family:inherit;}
+  .link-btn:hover{text-decoration:underline;}
+
+  .section-label{font-size:12.5px;font-weight:700;color:var(--ink);}
+
+  .switch{
+    width:36px;height:20px;border-radius:999px;
+    background:var(--line);
+    position:relative;
+    flex-shrink:0;
+    cursor:pointer;
+    border:none;
+    padding:0;
+  }
+  .switch.on{background:var(--indigo);}
+  .switch:after{
+    content:"";
+    position:absolute;top:2px;left:2px;
+    width:16px;height:16px;border-radius:50%;
+    background:#fff;
+    box-shadow:0 1px 2px rgba(0,0,0,.2);
+    transition:left .2s;
+  }
+  .switch.on:after{left:18px;}
+
+  .logout-row{
+    border:1px solid var(--red-bg);
+    border-radius:var(--radius-md);
+    color:var(--red);
+    font-weight:700;
+    justify-content:center;
+    cursor:pointer;
+    padding:12px;
+    text-align:center;
+    background:none;
+    font-family:inherit;
+    font-size:13px;
+    transition:background .15s;
+  }
+  .logout-row:hover{background:var(--red-bg);}
+
+  .lang-row{position:relative;}
+  .lang-menu{
+    position:absolute;
+    top:38px;right:14px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius-sm);
+    box-shadow:var(--shadow);
+    display:none;
+    flex-direction:column;
+    min-width:130px;
+    z-index:20;
+    overflow:hidden;
+  }
+  .lang-menu.open{display:flex;}
+  .lang-menu button{
+    background:none;border:none;text-align:left;
+    padding:9px 12px;font-size:12px;font-weight:600;
+    color:var(--ink);cursor:pointer;font-family:inherit;
+  }
+  .lang-menu button:hover{background:var(--bg);}
+  .lang-menu button.active{color:var(--indigo);background:var(--indigo-light);}
+
+  .modal-overlay{
+    position:fixed;inset:0;
+    background:rgba(0,0,0,.4);
+    display:none;
+    align-items:center;justify-content:center;
+    z-index:200;
+  }
+  .modal-overlay.open{display:flex;}
+  .modal{
+    background:var(--card);
+    border-radius:var(--radius-md);
+    padding:20px;
+    width:280px;
+    box-shadow:var(--shadow);
+  }
+  .modal h3{margin:0 0 6px;font-size:15px;font-weight:800;}
+  .modal p{margin:0 0 16px;font-size:12.5px;color:var(--ink-soft);line-height:1.4;}
+  .modal-actions{display:flex;gap:8px;}
+  .modal-actions button{
+    flex:1;
+    padding:9px;
+    border-radius:var(--radius-sm);
+    font-size:12.5px;
+    font-weight:700;
+    border:none;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .modal-cancel{background:var(--bg);color:var(--ink);}
+  .modal-confirm{background:var(--red);color:#fff;}
+
+  .toast{
+    position:fixed;
+    bottom:24px;left:50%;
+    transform:translateX(-50%) translateY(20px);
+    background:var(--ink);
+    color:var(--bg);
+    font-size:12.5px;font-weight:600;
+    padding:10px 18px;border-radius:999px;
+    opacity:0;pointer-events:none;
+    transition:opacity .2s, transform .2s;
+    z-index:300;
+    max-width:280px;text-align:center;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="screen">
+  <div class="panel">
+
+    <div class="row-between">
+      <div class="brand"><div class="logo">L</div>Learnix</div>
+    </div>
+
+    <div class="prof-head">
+      <div class="prof-avatar" id="avatarBtn">AS</div>
+      <div>
+        <div class="n">Aparna S</div>
+        <div class="r">Teacher</div>
+      </div>
+    </div>
+
+    <div class="settings-block">
+      <div class="set-row"><span class="lbl"><span class="ic">👤</span>Profile</span><button class="link-btn" data-action="edit-profile">Edit</button></div>
+      <div class="set-row"><span class="lbl"><span class="ic">✉</span>Email</span><span class="val">aparna.s@learnix.com</span></div>
+      <div class="set-row"><span class="lbl"><span class="ic">🔑</span>Password</span><button class="link-btn" data-action="change-password">Change</button></div>
+      <div class="set-row lang-row">
+        <span class="lbl"><span class="ic">🌐</span>Language</span>
+        <span class="val" id="langSelect" style="cursor:pointer;">English ▾</span>
+        <div class="lang-menu" id="langMenu">
+          <button data-lang="English" class="active">English</button>
+          <button data-lang="Hindi">Hindi</button>
+          <button data-lang="Tamil">Tamil</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Preferences</div>
+    <div class="settings-block">
+      <div class="set-row"><span class="lbl"><span class="ic">🌙</span>Dark mode</span><button class="switch" id="darkToggle"></button></div>
+      <div class="set-row"><span class="lbl"><span class="ic">🔔</span>Email notifications</span><button class="switch on" id="emailToggle"></button></div>
+      <div class="set-row"><span class="lbl"><span class="ic">📅</span>Class reminders</span><button class="switch on" id="reminderToggle"></button></div>
+      <div class="set-row"><span class="lbl"><span class="ic">🔒</span>Privacy</span><button class="link-btn" data-action="manage-privacy">Manage</button></div>
+    </div>
+
+    <button class="logout-row" id="logoutBtn">Log out</button>
+
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>Log out of Learnix?</h3>
+    <p>You'll need to sign in again to access your classes and dashboard.</p>
+    <div class="modal-actions">
+      <button class="modal-cancel" id="modalCancel">Cancel</button>
+      <button class="modal-confirm" id="modalConfirm">Log out</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  const toastEl = document.getElementById("toast");
+  function showToast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toastEl.classList.remove("show"), 1800);
+  }
+
+  function wireToggle(id, onChange) {
+    const el = document.getElementById(id);
+    el.addEventListener("click", () => {
+      el.classList.toggle("on");
+      if (onChange) onChange(el.classList.contains("on"));
+    });
+  }
+
+  wireToggle("emailToggle", (on) => showToast(`Email notifications ${on ? "enabled" : "disabled"}`));
+  wireToggle("reminderToggle", (on) => showToast(`Class reminders ${on ? "enabled" : "disabled"}`));
+  wireToggle("darkToggle", (on) => {
+    document.documentElement.classList.toggle("dark", on);
+    showToast(`Dark mode ${on ? "on" : "off"}`);
+  });
+
+  const langSelect = document.getElementById("langSelect");
+  const langMenu = document.getElementById("langMenu");
+  langSelect.addEventListener("click", (e) => {
+    e.stopPropagation();
+    langMenu.classList.toggle("open");
+  });
+  document.addEventListener("click", () => langMenu.classList.remove("open"));
+  langMenu.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-lang]");
+    if (!btn) return;
+    langMenu.querySelectorAll("button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    langSelect.textContent = btn.dataset.lang + " ▾";
+    langMenu.classList.remove("open");
+    showToast(`Language set to ${btn.dataset.lang}`);
+  });
+
+  document.querySelectorAll("[data-action]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const action = btn.dataset.action;
+      const messages = {
+        "edit-profile": "Opening profile editor…",
+        "change-password": "Opening password change form…",
+        "manage-privacy": "Opening privacy settings…"
+      };
+      showToast(messages[action] || "Opening…");
+    });
+  });
+
+  document.getElementById("avatarBtn").addEventListener("click", () => {
+    showToast("Upload a new profile photo");
+  });
+
+  const overlay = document.getElementById("modalOverlay");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const modalCancel = document.getElementById("modalCancel");
+  const modalConfirm = document.getElementById("modalConfirm");
+
+  logoutBtn.addEventListener("click", () => overlay.classList.add("open"));
+  modalCancel.addEventListener("click", () => overlay.classList.remove("open"));
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) overlay.classList.remove("open");
+  });
+  modalConfirm.addEventListener("click", () => {
+    overlay.classList.remove("open");
+    showToast("Logged out");
+
+    setTimeout(() => {
+        window.location.href = "s1.html";   // change this if your login page has another name
+    }, 1000);
+});
+})();
+</script>
+
+</body>
+</html>

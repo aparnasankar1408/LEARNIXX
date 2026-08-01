@@ -1,0 +1,1322 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Learnix — Sign Up</title>
+
+<style>
+:root{
+  --purple:#6C4DF6;
+  --purple-dark:#5936E0;
+  --purple-soft:#EFEBFE;
+  --ink:#151726;
+  --gray:#6B7280;
+  --border:#E5E1F7;
+  --danger:#F0666B;
+  --success:#22A06B;
+  --bg:#FFFFFF;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html,body{
+  min-height:100%;
+}
+
+body{
+  font-family:'Poppins-fallback','Segoe UI',system-ui,-apple-system,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+}
+
+.wrap{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  padding:40px 8vw;
+}
+
+.card{
+  width:100%;
+  max-width:1100px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  gap:6vw;
+}
+
+/* ---------------- LEFT ---------------- */
+
+.left{
+  width:100%;
+  max-width:470px;
+  margin:auto;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:28px;
+
+  opacity:0;
+  animation:riseIn .55s ease forwards;
+}
+
+.brand .mark{
+  width:44px;
+  height:44px;
+  border-radius:13px;
+  background:var(--purple);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.brand .mark svg{
+  width:24px;
+  height:24px;
+}
+
+.brand span{
+  font-size:20px;
+  font-weight:700;
+}
+
+/* ROLE TABS */
+
+.tabs{
+  display:inline-flex;
+  background:var(--purple-soft);
+  border-radius:12px;
+  padding:5px;
+  margin-bottom:22px;
+
+  opacity:0;
+  animation:riseIn .55s ease forwards .1s;
+}
+
+.tabs button{
+  border:none;
+  background:transparent;
+
+  padding:9px 24px;
+
+  font-size:14px;
+  font-weight:600;
+
+  color:var(--gray);
+
+  border-radius:9px;
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.tabs button.active{
+  background:var(--purple);
+  color:white;
+
+  box-shadow:0 8px 18px -8px rgba(108,77,246,.6);
+}
+
+/* TITLE */
+
+.title{
+  font-size:32px;
+  font-weight:800;
+  letter-spacing:-.5px;
+
+  opacity:0;
+  animation:riseIn .55s ease forwards .18s;
+}
+
+.subtitle{
+  margin-top:7px;
+  color:var(--gray);
+  font-size:15px;
+
+  opacity:0;
+  animation:riseIn .55s ease forwards .25s;
+}
+
+/* FORM */
+
+form{
+  margin-top:24px;
+}
+
+.field{
+  margin-bottom:15px;
+
+  opacity:0;
+  animation:riseIn .55s ease forwards;
+}
+
+.field:nth-child(1){
+  animation-delay:.30s;
+}
+
+.field:nth-child(2){
+  animation-delay:.36s;
+}
+
+.field:nth-child(3){
+  animation-delay:.42s;
+}
+
+.field:nth-child(4){
+  animation-delay:.48s;
+}
+
+.field label{
+  display:block;
+
+  font-size:13.5px;
+  font-weight:600;
+
+  margin-bottom:7px;
+}
+
+.input-box{
+  position:relative;
+}
+
+.input-box input{
+  width:100%;
+
+  padding:12px 15px;
+
+  font-size:14px;
+
+  border:1.5px solid var(--border);
+  border-radius:11px;
+
+  outline:none;
+
+  color:var(--ink);
+  background:white;
+
+  transition:.2s;
+}
+
+.input-box input:focus{
+  border-color:var(--purple);
+
+  box-shadow:
+    0 0 0 4px rgba(108,77,246,.12);
+}
+
+.input-box input.error{
+  border-color:var(--danger);
+}
+
+.error-msg{
+  display:none;
+
+  margin-top:5px;
+
+  font-size:11.5px;
+  color:var(--danger);
+}
+
+.error-msg.show{
+  display:block;
+}
+
+/* PASSWORD BUTTON */
+
+.toggle-pw{
+  position:absolute;
+
+  right:13px;
+  top:50%;
+
+  transform:translateY(-50%);
+
+  background:none;
+  border:none;
+
+  cursor:pointer;
+
+  color:var(--gray);
+
+  display:flex;
+}
+
+.toggle-pw svg{
+  width:18px;
+  height:18px;
+}
+
+/* SIGNUP BUTTON */
+
+.submit{
+  width:100%;
+
+  margin-top:5px;
+
+  padding:14px;
+
+  background:var(--purple);
+  color:white;
+
+  border:none;
+  border-radius:12px;
+
+  font-size:15px;
+  font-weight:600;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 16px 28px -12px rgba(108,77,246,.55);
+
+  transition:.2s;
+
+  opacity:0;
+  animation:riseIn .55s ease forwards .55s;
+}
+
+.submit:hover{
+  background:var(--purple-dark);
+  transform:translateY(-2px);
+}
+
+.submit:disabled{
+  opacity:.7;
+  cursor:not-allowed;
+  transform:none;
+}
+
+/* FOOTER */
+
+.foot{
+  margin-top:20px;
+
+  text-align:center;
+
+  font-size:13.5px;
+  color:var(--gray);
+
+  opacity:0;
+  animation:riseIn .55s ease forwards .65s;
+}
+
+.foot a{
+  color:var(--purple);
+  font-weight:600;
+  text-decoration:none;
+}
+
+.foot a:hover{
+  text-decoration:underline;
+}
+
+/* RIGHT ILLUSTRATION */
+
+.stage{
+  opacity:0;
+  animation:fadeScale .7s ease forwards .25s;
+}
+
+.stage svg{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+.float{
+  animation:bob 4.6s ease-in-out infinite;
+}
+
+.float.two{
+  animation-delay:.7s;
+}
+
+@keyframes riseIn{
+
+  from{
+    opacity:0;
+    transform:translateY(14px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+}
+
+@keyframes fadeScale{
+
+  from{
+    opacity:0;
+    transform:scale(.94);
+  }
+
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+
+}
+
+@keyframes bob{
+
+  0%,100%{
+    transform:translateY(0);
+  }
+
+  50%{
+    transform:translateY(-6px);
+  }
+
+}
+
+@media(max-width:900px){
+
+  .wrap{
+    padding:40px 7vw;
+  }
+
+  .card{
+    grid-template-columns:1fr;
+  }
+
+  .stage{
+    order:-1;
+    max-width:300px;
+    margin:auto;
+  }
+
+  .left{
+    max-width:500px;
+  }
+
+  .title{
+    font-size:28px;
+  }
+
+}
+
+@media(prefers-reduced-motion:reduce){
+
+  *{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+  }
+
+}
+</style>
+</head>
+
+
+<body>
+
+<div class="wrap">
+
+<div class="card">
+
+<!-- ================= LEFT ================= -->
+
+<div class="left">
+
+<!-- BRAND -->
+
+<div class="brand">
+
+<div class="mark">
+
+<svg viewBox="0 0 24 24"
+     fill="none"
+     xmlns="http://www.w3.org/2000/svg">
+
+<path
+d="M12 3L2 8.5L12 14L22 8.5L12 3Z"
+fill="white"/>
+
+<path
+d="M6 11.5V16C6 16 8 19 12 19C16 19 18 16 18 16V11.5"
+stroke="white"
+stroke-width="1.7"
+stroke-linecap="round"
+stroke-linejoin="round"/>
+
+</svg>
+
+</div>
+
+<span>Learnix</span>
+
+</div>
+
+
+<!-- ROLE -->
+
+<div class="tabs" id="roleTabs">
+
+<button
+type="button"
+class="active"
+data-role="teacher">
+
+Teacher
+
+</button>
+
+<button
+type="button"
+data-role="student">
+
+Student
+
+</button>
+
+</div>
+
+
+<h1 class="title">
+Create Account
+</h1>
+
+<p class="subtitle">
+Join Learnix and start learning
+</p>
+
+
+<!-- FORM -->
+
+<form id="signupForm" novalidate>
+
+
+<!-- NAME -->
+
+<div class="field">
+
+<label for="name">
+Full Name
+</label>
+
+<div class="input-box">
+
+<input
+type="text"
+id="name"
+placeholder="Enter your name"
+autocomplete="name">
+
+</div>
+
+<p
+class="error-msg"
+id="nameError">
+
+Please enter your name.
+
+</p>
+
+</div>
+
+
+<!-- EMAIL -->
+
+<div class="field">
+
+<label for="email">
+Email
+</label>
+
+<div class="input-box">
+
+<input
+type="email"
+id="email"
+placeholder="name@example.com"
+autocomplete="email">
+
+</div>
+
+<p
+class="error-msg"
+id="emailError">
+
+Please enter a valid email address.
+
+</p>
+
+</div>
+
+
+<!-- PASSWORD -->
+
+<div class="field">
+
+<label for="password">
+Password
+</label>
+
+<div class="input-box">
+
+<input
+type="password"
+id="password"
+placeholder="Minimum 6 characters"
+autocomplete="new-password">
+
+<button
+type="button"
+class="toggle-pw"
+id="togglePassword"
+aria-label="Show password">
+
+<svg
+viewBox="0 0 24 24"
+fill="none"
+xmlns="http://www.w3.org/2000/svg">
+
+<path
+d="M1 12S5 5 12 5S23 12 23 12S19 19 12 19S1 12 1 12Z"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linejoin="round"/>
+
+<circle
+cx="12"
+cy="12"
+r="3"
+stroke="currentColor"
+stroke-width="1.8"/>
+
+</svg>
+
+</button>
+
+</div>
+
+<p
+class="error-msg"
+id="passwordError">
+
+Password must be at least 6 characters.
+
+</p>
+
+</div>
+
+
+<!-- CONFIRM PASSWORD -->
+
+<div class="field">
+
+<label for="confirmPassword">
+Confirm Password
+</label>
+
+<div class="input-box">
+
+<input
+type="password"
+id="confirmPassword"
+placeholder="Re-enter your password"
+autocomplete="new-password">
+
+<button
+type="button"
+class="toggle-pw"
+id="toggleConfirm"
+aria-label="Show password">
+
+<svg
+viewBox="0 0 24 24"
+fill="none"
+xmlns="http://www.w3.org/2000/svg">
+
+<path
+d="M1 12S5 5 12 5S23 12 23 12S19 19 12 19S1 12 1 12Z"
+stroke="currentColor"
+stroke-width="1.8"
+stroke-linejoin="round"/>
+
+<circle
+cx="12"
+cy="12"
+r="3"
+stroke="currentColor"
+stroke-width="1.8"/>
+
+</svg>
+
+</button>
+
+</div>
+
+<p
+class="error-msg"
+id="confirmError">
+
+Passwords do not match.
+
+</p>
+
+</div>
+
+
+<button
+type="submit"
+class="submit"
+id="signupBtn">
+
+Create Account
+
+</button>
+
+</form>
+
+
+<p class="foot">
+    Already have an account?
+    <a href="s2.html">Login</a>
+</p>
+
+</div>
+
+
+<!-- ================= RIGHT ================= -->
+
+<div class="stage">
+
+<svg
+viewBox="0 0 480 520"
+fill="none"
+xmlns="http://www.w3.org/2000/svg">
+
+<!-- shadow -->
+
+<ellipse
+cx="240"
+cy="486"
+rx="150"
+ry="18"
+fill="#EFEBFE"/>
+
+
+<!-- desk -->
+
+<rect
+x="70"
+y="330"
+width="230"
+height="14"
+rx="7"
+fill="#D8CDFA"/>
+
+<rect
+x="90"
+y="344"
+width="14"
+height="90"
+fill="#C4B6F5"/>
+
+<rect
+x="256"
+y="344"
+width="14"
+height="90"
+fill="#C4B6F5"/>
+
+
+<!-- laptop -->
+
+<rect
+x="128"
+y="296"
+width="110"
+height="38"
+rx="4"
+fill="#6C4DF6"/>
+
+<path
+d="M118 334H248L238 348H128L118 334Z"
+fill="#5936E0"/>
+
+<rect
+x="140"
+y="264"
+width="86"
+height="66"
+rx="5"
+fill="#8674E8"/>
+
+<rect
+x="147"
+y="271"
+width="72"
+height="50"
+rx="2"
+fill="#211E2E"/>
+
+
+<!-- books -->
+
+<rect
+x="72"
+y="312"
+width="44"
+height="10"
+rx="2"
+fill="#F5B93E"/>
+
+<rect
+x="76"
+y="322"
+width="40"
+height="10"
+rx="2"
+fill="#63C58B"/>
+
+
+<!-- person -->
+
+<g>
+
+<path
+d="M120 470C120 420 150 392 182 392C214 392 244 420 244 470V486H120V470Z"
+fill="#6C4DF6"/>
+
+<rect
+x="150"
+y="420"
+width="64"
+height="70"
+rx="10"
+fill="#5936E0"/>
+
+<circle
+cx="182"
+cy="240"
+r="34"
+fill="#8C5A3C"/>
+
+<path
+d="M148 232C148 200 162 182 182 182C202 182 216 200 216 232C216 236 214 238 212 236C210 210 198 194 182 194C166 194 154 210 152 236C150 238 148 236 148 232Z"
+fill="#1E1613"/>
+
+<path
+d="M148 224C144 244 146 260 154 268"
+stroke="#1E1613"
+stroke-width="10"
+stroke-linecap="round"/>
+
+<path
+d="M216 224C220 244 218 260 210 268"
+stroke="#1E1613"
+stroke-width="10"
+stroke-linecap="round"/>
+
+<circle
+cx="174"
+cy="244"
+r="3"
+fill="#1E1613"/>
+
+<circle
+cx="192"
+cy="244"
+r="3"
+fill="#1E1613"/>
+
+<path
+d="M172 256 Q182 262 192 256"
+stroke="#1E1613"
+stroke-width="2.2"
+stroke-linecap="round"/>
+
+</g>
+
+
+<!-- speech bubble -->
+
+<g class="float">
+
+<rect
+x="286"
+y="130"
+width="130"
+height="70"
+rx="16"
+fill="white"
+stroke="#E5E1F7"
+stroke-width="2"/>
+
+<path
+d="M312 200L300 220L330 200Z"
+fill="white"
+stroke="#E5E1F7"
+stroke-width="2"/>
+
+<rect
+x="302"
+y="150"
+width="90"
+height="7"
+rx="3.5"
+fill="#C9BEFA"/>
+
+<rect
+x="302"
+y="164"
+width="60"
+height="7"
+rx="3.5"
+fill="#8674E8"/>
+
+</g>
+
+
+<!-- envelope -->
+
+<g class="float two">
+
+<rect
+x="60"
+y="110"
+width="76"
+height="54"
+rx="8"
+fill="#EFEBFE"
+stroke="#C9BEFA"
+stroke-width="2"/>
+
+<path
+d="M62 116L98 142L134 116"
+stroke="#8674E8"
+stroke-width="2.4"
+fill="none"/>
+
+</g>
+
+
+<!-- dots -->
+
+<circle
+cx="420"
+cy="90"
+r="6"
+fill="#F5B93E"
+class="float"/>
+
+<circle
+cx="40"
+cy="260"
+r="5"
+fill="#59D6C4"
+class="float two"/>
+
+<circle
+cx="440"
+cy="360"
+r="7"
+fill="#F0666B"
+class="float"/>
+
+</svg>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- ================= FIREBASE ================= -->
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile
+}
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+/* FIREBASE CONFIG */
+
+const firebaseConfig = {
+
+  apiKey:
+  "AIzaSyArFJw7BzXPTpwld9oNtXXRKlSHasYyMS8",
+
+  authDomain:
+  "learnix-e04e5.firebaseapp.com",
+
+  projectId:
+  "learnix-e04e5",
+
+  storageBucket:
+  "learnix-e04e5.firebasestorage.app",
+
+  messagingSenderId:
+  "542441509489",
+
+  appId:
+  "1:542441509489:web:2dce3c3740e112cbae81d0"
+
+};
+
+
+/* INITIALIZE FIREBASE */
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+
+/* ROLE */
+
+const tabs =
+document.querySelectorAll("#roleTabs button");
+
+let activeRole = "teacher";
+
+
+tabs.forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    tabs.forEach(btn =>
+      btn.classList.remove("active")
+    );
+
+    button.classList.add("active");
+
+    activeRole =
+      button.dataset.role;
+
+    console.log(
+      "Selected role:",
+      activeRole
+    );
+
+  });
+
+});
+
+
+/* INPUTS */
+
+const form =
+document.getElementById("signupForm");
+
+const nameInput =
+document.getElementById("name");
+
+const emailInput =
+document.getElementById("email");
+
+const passwordInput =
+document.getElementById("password");
+
+const confirmInput =
+document.getElementById("confirmPassword");
+
+const nameError =
+document.getElementById("nameError");
+
+const emailError =
+document.getElementById("emailError");
+
+const passwordError =
+document.getElementById("passwordError");
+
+const confirmError =
+document.getElementById("confirmError");
+
+const signupBtn =
+document.getElementById("signupBtn");
+
+
+/* PASSWORD SHOW/HIDE */
+
+function togglePassword(input, button){
+
+  button.addEventListener("click", () => {
+
+    const hidden =
+      input.type === "password";
+
+    input.type =
+      hidden ? "text" : "password";
+
+    button.setAttribute(
+      "aria-label",
+      hidden
+        ? "Hide password"
+        : "Show password"
+    );
+
+  });
+
+}
+
+
+togglePassword(
+  passwordInput,
+  document.getElementById("togglePassword")
+);
+
+
+togglePassword(
+  confirmInput,
+  document.getElementById("toggleConfirm")
+);
+
+
+/* EMAIL VALIDATION */
+
+function isValidEmail(email){
+
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    .test(email);
+
+}
+
+
+/* SIGN UP */
+
+form.addEventListener(
+  "submit",
+  async (event) => {
+
+    event.preventDefault();
+
+
+    const name =
+      nameInput.value.trim();
+
+    const email =
+      emailInput.value.trim();
+
+    const password =
+      passwordInput.value;
+
+    const confirmPassword =
+      confirmInput.value;
+
+
+    let valid = true;
+
+
+    /* NAME */
+
+    if(name.length < 2){
+
+      nameInput.classList.add("error");
+      nameError.classList.add("show");
+
+      valid = false;
+
+    }else{
+
+      nameInput.classList.remove("error");
+      nameError.classList.remove("show");
+
+    }
+
+
+    /* EMAIL */
+
+    if(!isValidEmail(email)){
+
+      emailInput.classList.add("error");
+      emailError.classList.add("show");
+
+      valid = false;
+
+    }else{
+
+      emailInput.classList.remove("error");
+      emailError.classList.remove("show");
+
+    }
+
+
+    /* PASSWORD */
+
+    if(password.length < 6){
+
+      passwordInput.classList.add("error");
+      passwordError.classList.add("show");
+
+      valid = false;
+
+    }else{
+
+      passwordInput.classList.remove("error");
+      passwordError.classList.remove("show");
+
+    }
+
+
+    /* CONFIRM PASSWORD */
+
+    if(password !== confirmPassword){
+
+      confirmInput.classList.add("error");
+      confirmError.classList.add("show");
+
+      valid = false;
+
+    }else{
+
+      confirmInput.classList.remove("error");
+      confirmError.classList.remove("show");
+
+    }
+
+
+    if(!valid){
+      return;
+    }
+
+
+    /* BUTTON */
+
+    signupBtn.disabled = true;
+
+    signupBtn.textContent =
+      "Creating Account...";
+
+
+    try{
+
+      /* CREATE FIREBASE ACCOUNT */
+
+      const userCredential =
+        await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+
+      const user =
+        userCredential.user;
+
+
+      /* SAVE DISPLAY NAME */
+
+      await updateProfile(
+        user,
+        {
+          displayName: name
+        }
+      );
+
+
+      /*
+        Save selected role locally
+        for the current browser.
+      */
+
+      localStorage.setItem(
+        "learnixRole",
+        activeRole
+      );
+
+
+      localStorage.setItem(
+        "learnixName",
+        name
+      );
+
+
+      alert(
+        "Account created successfully!"
+      );
+
+
+      /* GO TO LOGIN */
+
+      window.location.href =
+        "login.html";
+
+
+    }catch(error){
+
+      console.error(
+        "Firebase Signup Error:",
+        error
+      );
+
+
+      if(
+        error.code ===
+        "auth/email-already-in-use"
+      ){
+
+        alert(
+          "This email is already registered."
+        );
+
+      }
+
+      else if(
+        error.code ===
+        "auth/weak-password"
+      ){
+
+        alert(
+          "Password is too weak."
+        );
+
+      }
+
+      else if(
+        error.code ===
+        "auth/invalid-email"
+      ){
+
+        alert(
+          "Please enter a valid email."
+        );
+
+      }
+
+      else{
+
+        alert(
+          "Signup failed: " +
+          error.message
+        );
+
+      }
+
+
+      signupBtn.disabled = false;
+
+      signupBtn.textContent =
+        "Create Account";
+
+    }
+
+  }
+);
+
+</script>
+
+</body>
+</html>
+```

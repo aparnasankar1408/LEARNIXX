@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Learnix — Login</title>
+<style>
+  :root{
+    --purple:#6C4DF6;
+    --purple-dark:#5936E0;
+    --purple-soft:#EFEBFE;
+    --ink:#151726;
+    --gray:#6B7280;
+    --border:#E5E1F7;
+    --bg:#FFFFFF;
+    --danger:#F0666B;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+
+  body{
+    font-family:'Poppins-fallback','Segoe UI',system-ui,-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+  }
+
+  .wrap{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    padding:0 8vw;
+  }
+
+  .card{
+    width:100%;
+    max-width:1100px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    align-items:center;
+    gap:6vw;
+  }
+
+  /* ---------- left column: form ---------- */
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:36px;
+    opacity:0;
+    animation: riseIn .55s ease forwards .05s;
+  }
+  .brand .mark{
+    width:44px; height:44px;
+    border-radius:13px;
+    background:var(--purple);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .brand .mark svg{ width:24px; height:24px; }
+  .brand span{ font-size:20px; font-weight:700; }
+
+  .tabs{
+    display:inline-flex;
+    background:var(--purple-soft);
+    border-radius:12px;
+    padding:5px;
+    margin-bottom:30px;
+    opacity:0;
+    animation: riseIn .55s ease forwards .15s;
+  }
+  .tabs button{
+    border:none;
+    background:transparent;
+    padding:10px 26px;
+    font-size:14.5px;
+    font-weight:600;
+    color:var(--gray);
+    border-radius:9px;
+    cursor:pointer;
+    transition: background .2s ease, color .2s ease, box-shadow .2s ease;
+  }
+  .tabs button.active{
+    background:var(--purple);
+    color:#fff;
+    box-shadow:0 8px 18px -8px rgba(108,77,246,.6);
+  }
+
+  h1.title{
+    font-size:32px;
+    font-weight:800;
+    letter-spacing:-.5px;
+    opacity:0;
+    animation: riseIn .55s ease forwards .22s;
+  }
+  .subtitle{
+    margin-top:8px;
+    color:var(--gray);
+    font-size:15px;
+    opacity:0;
+    animation: riseIn .55s ease forwards .3s;
+  }
+
+  form{ margin-top:30px; }
+
+  .field{
+    margin-bottom:20px;
+    opacity:0;
+    animation: riseIn .55s ease forwards;
+  }
+  .field:nth-of-type(1){ animation-delay:.38s; }
+  .field:nth-of-type(2){ animation-delay:.46s; }
+
+  .field label{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:13.5px;
+    font-weight:600;
+    margin-bottom:8px;
+  }
+  .field label a{
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--purple);
+    text-decoration:none;
+  }
+  .field label a:hover{ text-decoration:underline; }
+
+  .input-box{
+    position:relative;
+    display:flex;
+    align-items:center;
+  }
+
+  .input-box input{
+    width:100%;
+    padding:13px 16px;
+    font-size:14.5px;
+    border:1.5px solid var(--border);
+    border-radius:11px;
+    outline:none;
+    color:var(--ink);
+    background:#fff;
+    transition: border-color .2s ease, box-shadow .2s ease;
+  }
+  .input-box input:focus{
+    border-color:var(--purple);
+    box-shadow:0 0 0 4px rgba(108,77,246,.12);
+  }
+  .input-box input.error{ border-color:var(--danger); }
+
+  .toggle-pw{
+    position:absolute;
+    right:14px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    color:var(--gray);
+    display:flex;
+    align-items:center;
+  }
+  .toggle-pw svg{ width:18px; height:18px; }
+
+  .error-msg{
+    font-size:12px;
+    color:var(--danger);
+    margin-top:6px;
+    display:none;
+  }
+  .error-msg.show{ display:block; }
+
+  .submit{
+    width:100%;
+    margin-top:8px;
+    background:var(--purple);
+    color:#fff;
+    border:none;
+    font-size:15.5px;
+    font-weight:600;
+    padding:15px;
+    border-radius:12px;
+    cursor:pointer;
+    box-shadow:0 16px 28px -12px rgba(108,77,246,.55);
+    transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+    opacity:0;
+    animation: riseIn .55s ease forwards .54s;
+  }
+  .submit:hover{ background:var(--purple-dark); transform:translateY(-2px); }
+  .submit:active{ transform:translateY(0); }
+  .submit:disabled{ opacity:.7; cursor:not-allowed; transform:none; }
+
+  .divider{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin:24px 0;
+    color:var(--gray);
+    font-size:13px;
+    opacity:0;
+    animation: riseIn .55s ease forwards .6s;
+  }
+  .divider::before, .divider::after{
+    content:'';
+    flex:1;
+    height:1px;
+    background:var(--border);
+  }
+
+  .google-btn{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:13px;
+    border:1.5px solid var(--border);
+    border-radius:12px;
+    background:#fff;
+    font-size:14.5px;
+    font-weight:600;
+    color:var(--ink);
+    cursor:pointer;
+    transition: border-color .2s ease, background .2s ease;
+    opacity:0;
+    animation: riseIn .55s ease forwards .68s;
+  }
+  .google-btn:hover{ border-color:#C9C2F0; background:#FAF9FF; }
+  .google-btn svg{ width:18px; height:18px; }
+
+  .foot{
+    margin-top:26px;
+    text-align:center;
+    font-size:14px;
+    color:var(--gray);
+    opacity:0;
+    animation: riseIn .55s ease forwards .76s;
+  }
+  .foot a{ color:var(--purple); font-weight:600; text-decoration:none; }
+  .foot a:hover{ text-decoration:underline; }
+
+  /* ---------- right column illustration ---------- */
+  .stage{
+    position:relative;
+    opacity:0;
+    animation: fadeScale .7s ease forwards .3s;
+  }
+  .stage svg{ width:100%; height:auto; display:block; }
+  .float{ animation: bob 4.6s ease-in-out infinite; transform-origin:center; }
+  .float.two{ animation-delay:.7s; }
+
+  @keyframes riseIn{
+    from{ opacity:0; transform:translateY(14px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  @keyframes fadeScale{
+    from{ opacity:0; transform:scale(.94); }
+    to{ opacity:1; transform:scale(1); }
+  }
+  @keyframes bob{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-6px); }
+  }
+
+  @media (max-width:900px){
+    .wrap{ padding:6vh 7vw; }
+    .card{ grid-template-columns:1fr; }
+    .stage{ order:-1; max-width:340px; margin:0 auto 10px; }
+    h1.title{ font-size:28px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:.01ms !important; animation-iteration-count:1 !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="card">
+
+    <!-- LEFT: login form -->
+    <div class="left">
+      <div class="brand">
+        <div class="mark">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3L2 8.5L12 14L22 8.5L12 3Z" fill="white"/>
+            <path d="M6 11.5V16C6 16 8 19 12 19C16 19 18 16 18 16V11.5" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span>Learnix</span>
+      </div>
+     
+
+      <div class="tabs" id="roleTabs">
+        <button type="button" class="active" data-role="teacher">Teacher</button>
+        <button type="button" data-role="student">Student</button>
+      </div>
+
+      <h1 class="title">Welcome Back!</h1>
+      <p class="subtitle">Login to continue to Learnix</p>
+
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="email">Email</label>
+          <div class="input-box">
+            <input type="email" id="email" placeholder="name@example.com" autocomplete="email" />
+          </div>
+          <p class="error-msg" id="emailError">Please enter a valid email address.</p>
+        </div>
+
+        <div class="field">
+          <label for="password">Password <a href="#">Forgot Password?</a></label>
+          <div class="input-box">
+            <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" />
+            <button type="button" class="toggle-pw" id="togglePw" aria-label="Show password">
+              <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 12S5 5 12 5S23 12 23 12S19 19 12 19S1 12 1 12Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+              </svg>
+            </button>
+          </div>
+          <p class="error-msg" id="passwordError">Password must be at least 6 characters.</p>
+        </div>
+
+        <button type="submit" class="submit" id="submitBtn">Login</button>
+      </form>
+
+      <div class="divider">or</div>
+
+      <button type="button" class="google-btn" id="googleBtn">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M23 12.27C23 11.48 22.93 10.73 22.8 10H12v4.51h6.19c-.27 1.44-1.08 2.66-2.31 3.48v2.9h3.73C21.87 18.9 23 15.87 23 12.27Z" fill="#4285F4"/>
+          <path d="M12 23c3.13 0 5.75-1.04 7.66-2.81l-3.73-2.9c-1.04.7-2.36 1.11-3.93 1.11-3.02 0-5.58-2.04-6.49-4.78H1.66v3C3.56 20.53 7.46 23 12 23Z" fill="#34A853"/>
+          <path d="M5.51 13.62A6.96 6.96 0 0 1 5.13 12c0-.56.1-1.11.27-1.62v-3H1.66A10.98 10.98 0 0 0 0.6 12c0 1.77.43 3.45 1.06 4.62l3.85-2.99Z" fill="#FBBC05"/>
+          <path d="M12 4.76c1.7 0 3.23.58 4.43 1.72l3.32-3.32C17.75 1.29 15.13 0 12 0 7.46 0 3.56 2.47 1.66 6l3.85 3C6.42 6.8 8.98 4.76 12 4.76Z" fill="#EA4335"/>
+        </svg>
+        Continue with Google
+      </button>
+
+      <p class="foot">Don't have an account? <a href="signup.html">Sign up</a></p>
+    </div>
+
+    <!-- RIGHT: illustration -->
+    <div class="stage">
+      <svg viewBox="0 0 480 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- floor shadow -->
+        <ellipse cx="240" cy="486" rx="150" ry="18" fill="#EFEBFE"/>
+
+        <!-- desk -->
+        <rect x="70" y="330" width="230" height="14" rx="7" fill="#D8CDFA"/>
+        <rect x="90" y="344" width="14" height="90" fill="#C4B6F5"/>
+        <rect x="256" y="344" width="14" height="90" fill="#C4B6F5"/>
+
+        <!-- laptop on desk -->
+        <rect x="128" y="296" width="110" height="38" rx="4" fill="#6C4DF6"/>
+        <path d="M118 334H248L238 348H128L118 334Z" fill="#5936E0"/>
+        <rect x="140" y="264" width="86" height="66" rx="5" fill="#8674E8"/>
+        <rect x="147" y="271" width="72" height="50" rx="2" fill="#211E2E"/>
+
+        <!-- book stack -->
+        <rect x="72" y="312" width="44" height="10" rx="2" fill="#F5B93E"/>
+        <rect x="76" y="322" width="40" height="10" rx="2" fill="#63C58B"/>
+
+        <!-- seated person -->
+        <g>
+          <path d="M120 470C120 420 150 392 182 392C214 392 244 420 244 470V486H120V470Z" fill="#6C4DF6"/>
+          <rect x="150" y="420" width="64" height="70" rx="10" fill="#5936E0"/>
+          <circle cx="182" cy="240" r="34" fill="#8C5A3C"/>
+          <path d="M148 232C148 200 162 182 182 182C202 182 216 200 216 232C216 236 214 238 212 236C210 210 198 194 182 194C166 194 154 210 152 236C150 238 148 236 148 232Z" fill="#1E1613"/>
+          <path d="M148 224C144 244 146 260 154 268" stroke="#1E1613" stroke-width="10" stroke-linecap="round" fill="none"/>
+          <path d="M216 224C220 244 218 260 210 268" stroke="#1E1613" stroke-width="10" stroke-linecap="round" fill="none"/>
+          <circle cx="174" cy="244" r="3" fill="#1E1613"/>
+          <circle cx="192" cy="244" r="3" fill="#1E1613"/>
+          <path d="M172 256 Q182 262 192 256" stroke="#1E1613" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <!-- arms to laptop -->
+          <path d="M150 400C150 380 155 358 168 340" stroke="#6C4DF6" stroke-width="20" stroke-linecap="round"/>
+          <path d="M214 400C214 380 209 358 196 340" stroke="#6C4DF6" stroke-width="20" stroke-linecap="round"/>
+          <circle cx="168" cy="336" r="9" fill="#8C5A3C"/>
+          <circle cx="196" cy="336" r="9" fill="#8C5A3C"/>
+        </g>
+
+        <!-- chair -->
+        <rect x="112" y="440" width="14" height="46" rx="6" fill="#B9A9F7"/>
+        <rect x="238" y="440" width="14" height="46" rx="6" fill="#B9A9F7"/>
+
+        <!-- speech bubble -->
+        <g class="float">
+          <rect x="286" y="130" width="130" height="70" rx="16" fill="#FFFFFF" stroke="#E5E1F7" stroke-width="2"/>
+          <path d="M312 200L300 220L330 200Z" fill="#FFFFFF" stroke="#E5E1F7" stroke-width="2"/>
+          <rect x="302" y="150" width="90" height="7" rx="3.5" fill="#C9BEFA"/>
+          <rect x="302" y="164" width="60" height="7" rx="3.5" fill="#8674E8"/>
+        </g>
+
+        <!-- envelope -->
+        <g class="float two">
+          <rect x="60" y="110" width="76" height="54" rx="8" fill="#EFEBFE" stroke="#C9BEFA" stroke-width="2"/>
+          <path d="M62 116L98 142L134 116" stroke="#8674E8" stroke-width="2.4" fill="none" stroke-linejoin="round"/>
+        </g>
+
+        <!-- decorative dots -->
+        <circle cx="420" cy="90" r="6" fill="#F5B93E" class="float"/>
+        <circle cx="40" cy="260" r="5" fill="#59D6C4" class="float two"/>
+        <circle cx="440" cy="360" r="7" fill="#F0666B" class="float"/>
+
+      </svg>
+    </div>
+
+  </div>
+</div>
+
+
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+  // Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyArFJw7BzXPTpwld9oNtXXRKlSHasYyMS8",
+    authDomain: "learnix-e04e5.firebaseapp.com",
+    projectId: "learnix-e04e5",
+    storageBucket: "learnix-e04e5.firebasestorage.app",
+    messagingSenderId: "542441509489",
+    appId: "1:542441509489:web:2dce3c3740e112cbae81d0"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  // ---------------- ROLE TABS ----------------
+
+  const tabs = document.querySelectorAll("#roleTabs button");
+  let activeRole = "teacher";
+
+  tabs.forEach(btn => {
+    btn.addEventListener("click", () => {
+      tabs.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      activeRole = btn.dataset.role;
+
+      console.log("Selected role:", activeRole);
+    });
+  });
+
+
+  // ---------------- PASSWORD SHOW / HIDE ----------------
+
+  const pwInput = document.getElementById("password");
+  const toggleBtn = document.getElementById("togglePw");
+
+  toggleBtn.addEventListener("click", () => {
+
+    const isPassword = pwInput.type === "password";
+
+    pwInput.type = isPassword ? "text" : "password";
+
+    toggleBtn.setAttribute(
+      "aria-label",
+      isPassword ? "Hide password" : "Show password"
+    );
+  });
+
+
+  // ---------------- FORM VALIDATION ----------------
+
+  const form = document.getElementById("loginForm");
+
+  const emailInput = document.getElementById("email");
+  const emailError = document.getElementById("emailError");
+
+  const passwordError = document.getElementById("passwordError");
+
+  const submitBtn = document.getElementById("submitBtn");
+
+
+  function isValidEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+
+  // ---------------- FIREBASE LOGIN ----------------
+
+  form.addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const email = emailInput.value.trim();
+    const password = pwInput.value;
+
+    let valid = true;
+
+
+    // Email validation
+    if (!isValidEmail(email)) {
+
+      emailInput.classList.add("error");
+      emailError.classList.add("show");
+
+      valid = false;
+
+    } else {
+
+      emailInput.classList.remove("error");
+      emailError.classList.remove("show");
+
+    }
+
+
+    // Password validation
+    if (password.length < 6) {
+
+      pwInput.classList.add("error");
+      passwordError.classList.add("show");
+
+      valid = false;
+
+    } else {
+
+      pwInput.classList.remove("error");
+      passwordError.classList.remove("show");
+
+    }
+
+
+    if (!valid) return;
+
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Logging in...";
+
+
+    try {
+
+      // Firebase Authentication
+      const userCredential =
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+      const user = userCredential.user;
+
+      console.log("Firebase login successful");
+      console.log("User:", user.email);
+
+
+      // Role-based page navigation
+
+      if (activeRole === "teacher") {
+
+        window.location.href = "s3.html";
+
+      } else {
+
+        window.location.href = "s4.html";
+
+      }
+
+
+    } catch (error) {
+
+      console.error("Firebase error:", error);
+
+
+      if (
+        error.code === "auth/invalid-credential" ||
+        error.code === "auth/wrong-password" ||
+        error.code === "auth/user-not-found"
+      ) {
+
+        alert("Invalid email or password.");
+
+      }
+
+      else if (error.code === "auth/too-many-requests") {
+
+        alert("Too many attempts. Please try again later.");
+
+      }
+
+      else {
+
+        alert("Login failed: " + error.message);
+
+      }
+
+    }
+
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Login";
+
+  });
+
+
+  // ---------------- GOOGLE BUTTON ----------------
+
+  document.getElementById("googleBtn").addEventListener("click", () => {
+
+    alert("Google login will be added next.");
+
+  });
+
+</script>
+</body>
+</html>

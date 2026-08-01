@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learnix — Activity Dashboard</title>
+<style>
+  :root{
+    --purple:#6C5CE7;
+    --purple-dark:#5644D6;
+    --purple-light:#F1EEFE;
+    --purple-lighter:#F7F5FF;
+    --ink:#1E1B33;
+    --sub:#8B87A3;
+    --line:#ECEAF6;
+    --bg:#F4F3FB;
+    --card:#FFFFFF;
+    --gold:#F5A623;
+    --gold-light:#FEF3DF;
+    --green:#2ECC71;
+    --blue:#4FA8F5;
+    --pink:#FF7AB6;
+    --lock:#C9C6DA;
+    --radius:16px;
+    --radius-sm:10px;
+    --shadow:0 2px 10px rgba(76,64,166,0.06);
+    --shadow-hover:0 8px 24px rgba(76,64,166,0.14);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI',-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    padding:24px;
+  }
+  .page{ max-width:1180px; margin:0 auto; }
+
+  /* ===== page header ===== */
+  .page-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .page-head h1{ font-size:17px; margin:0; font-weight:700; }
+
+  .dropdown-wrap{ position:relative; }
+  .dropdown{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    background:var(--card);
+    border:1px solid var(--line);
+    padding:8px 14px;
+    border-radius:10px;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .dropdown svg{ opacity:.6; }
+  .dropdown-menu{
+    position:absolute;
+    top:calc(100% + 6px);
+    right:0;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:10px;
+    box-shadow:var(--shadow-hover);
+    min-width:140px;
+    padding:6px;
+    opacity:0;
+    transform:translateY(-6px);
+    pointer-events:none;
+    transition:opacity .15s ease, transform .15s ease;
+    z-index:40;
+  }
+  .dropdown-menu.open{
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+  }
+  .dropdown-item{
+    padding:8px 10px;
+    font-size:12.5px;
+    font-weight:600;
+    border-radius:7px;
+    cursor:pointer;
+    color:var(--ink);
+  }
+  .dropdown-item:hover{ background:var(--purple-lighter); color:var(--purple-dark); }
+  .dropdown-item.active{ background:var(--purple-light); color:var(--purple-dark); }
+
+  /* ===== stat cards row ===== */
+  .stat-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+    margin-bottom:16px;
+  }
+  .stat-card{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:16px 18px;
+    transition:opacity .15s ease;
+  }
+  .stat-card .num{ font-size:24px; font-weight:800; }
+  .stat-card .lbl{ font-size:12px; color:var(--sub); margin-top:2px; }
+
+  /* ===== main grid: activity overview + top students ===== */
+  .main-grid{
+    display:grid;
+    grid-template-columns:1.6fr 1fr;
+    gap:16px;
+    margin-bottom:16px;
+  }
+  .panel{
+    background:var(--card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:20px 22px 22px;
+  }
+  .panel-title{ font-size:14px; font-weight:700; margin:0 0 16px; }
+
+  /* bar chart */
+  .chart{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    height:170px;
+    padding:0 4px;
+  }
+  .chart .day{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    width:14%;
+  }
+  .chart .bars{
+    display:flex;
+    align-items:flex-end;
+    gap:3px;
+    height:140px;
+  }
+  .chart .bar{ width:8px; border-radius:4px 4px 0 0; transition:height .3s ease; }
+  .chart .day span{ font-size:10.5px; color:var(--sub); font-weight:600; }
+
+  /* top students */
+  .student-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .student-row:last-of-type{ border-bottom:none; }
+  .student-row .rank{ width:20px; font-size:12.5px; font-weight:700; color:var(--sub); }
+  .student-row img{ width:32px; height:32px; border-radius:50%; object-fit:cover; }
+  .student-row .info{ flex:1; }
+  .student-row .name{ font-size:12.5px; font-weight:700; }
+  .student-row .xp{ font-size:11px; color:var(--sub); }
+  .view-leaderboard{
+    width:100%;
+    margin-top:8px;
+    background:var(--purple);
+    color:#fff;
+    border:none;
+    padding:10px 0;
+    border-radius:10px;
+    font-size:12.5px;
+    font-weight:700;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:6px;
+  }
+  .view-leaderboard:hover{ background:var(--purple-dark); }
+
+  /* ===== achievements / badges panel ===== */
+  .achieve-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:14px;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .achieve-head .left h2{
+    font-size:14px;
+    margin:0 0 3px;
+    font-weight:700;
+    display:flex;align-items:center;gap:7px;
+  }
+  .achieve-head .left p{ margin:0; font-size:11.5px; color:var(--sub); }
+  .achieve-progress{ display:flex; align-items:center; gap:10px; min-width:170px; }
+  .achieve-progress .bar-track{
+    flex:1;
+    height:7px;
+    background:#E4E0F9;
+    border-radius:99px;
+    overflow:hidden;
+  }
+  .achieve-progress .bar-fill{
+    height:100%;
+    background:linear-gradient(90deg,var(--purple),#8C7CFB);
+    border-radius:99px;
+    transition:width .5s ease;
+  }
+  .achieve-progress .pct{ font-size:11.5px; font-weight:700; color:var(--purple-dark); white-space:nowrap; }
+
+  /* badge filter tabs */
+  .badge-tabs{ display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+  .badge-tab{
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--sub);
+    font-size:11.5px;
+    font-weight:700;
+    padding:6px 13px;
+    border-radius:99px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .badge-tab .count{
+    background:var(--purple-light);
+    color:var(--purple-dark);
+    font-size:10px;
+    padding:1px 6px;
+    border-radius:99px;
+    font-weight:700;
+  }
+  .badge-tab.active{ background:var(--purple); color:#fff; border-color:var(--purple); }
+  .badge-tab.active .count{ background:rgba(255,255,255,0.25); color:#fff; }
+
+  .badge-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
+  .badge-card{
+    position:relative;
+    border:1px solid var(--line);
+    border-radius:var(--radius-sm);
+    padding:14px 10px 12px;
+    text-align:center;
+    background:var(--card);
+    transition:box-shadow .2s ease, transform .2s ease;
+    cursor:pointer;
+  }
+  .badge-card:hover{ box-shadow:var(--shadow-hover); transform:translateY(-2px); }
+  .badge-card.locked{ background:#FAFAFC; }
+  .badge-card.locked .badge-icon-wrap{ background:#EFEEF6; filter:grayscale(1); opacity:.6; }
+  .badge-card.locked .badge-name,
+  .badge-card.locked .badge-desc{ color:var(--lock); }
+
+  .badge-icon-wrap{
+    width:48px;height:48px;
+    margin:0 auto 8px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--gold-light);
+    position:relative;
+  }
+  .new-dot{
+    position:absolute;top:8px;right:8px;
+    width:7px;height:7px;border-radius:50%;
+    background:#FF5C7A;box-shadow:0 0 0 3px #FFE1E7;
+  }
+  .badge-name{ font-size:11px; font-weight:700; margin-bottom:2px; }
+  .badge-desc{ font-size:9.5px; color:var(--sub); line-height:1.35; min-height:24px; }
+  .badge-foot{ margin-top:8px; }
+  .claim-btn{
+    width:100%;border:none;background:var(--purple);color:#fff;
+    font-size:10px;font-weight:700;padding:6px 0;border-radius:7px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:4px;
+  }
+  .claim-btn:hover{ background:var(--purple-dark); }
+  .earned-date{ font-size:9.5px; color:var(--green); font-weight:700; }
+  .lock-note{
+    font-size:9.5px;color:var(--lock);font-weight:600;
+    display:flex;align-items:center;justify-content:center;gap:3px;
+  }
+  .empty-state{
+    grid-column:1/-1;
+    text-align:center;
+    padding:30px 10px;
+    color:var(--sub);
+    font-size:12.5px;
+  }
+
+  /* toast */
+  .toast{
+    position:fixed;left:50%;bottom:26px;
+    transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:#fff;
+    padding:11px 18px;border-radius:99px;
+    font-size:12.5px;font-weight:600;
+    display:flex;align-items:center;gap:8px;
+    opacity:0;pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+    box-shadow:0 10px 26px rgba(0,0,0,.25);
+    z-index:50;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+  .toast .dot{
+    width:18px;height:18px;border-radius:50%;background:var(--gold);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+
+  /* modal */
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(30,27,51,0.45);
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;transition:opacity .2s ease;
+    z-index:60;padding:20px;
+  }
+  .modal-backdrop.show{ opacity:1; pointer-events:auto; }
+  .modal{
+    background:#fff;border-radius:18px;width:300px;
+    padding:24px 20px 20px;text-align:center;
+    transform:scale(.92);transition:transform .2s ease;position:relative;
+  }
+  .modal-backdrop.show .modal{ transform:scale(1); }
+  .modal .badge-icon-wrap{ width:70px; height:70px; background:var(--gold-light); }
+  .modal h3{ margin:12px 0 4px; font-size:15px; }
+  .modal p{ margin:0 0 14px; font-size:12px; color:var(--sub); line-height:1.5; }
+  .modal .modal-actions{ display:flex; gap:8px; }
+  .modal button{
+    flex:1;padding:9px 0;border-radius:9px;border:none;
+    font-size:12px;font-weight:700;cursor:pointer;
+  }
+  .modal .btn-secondary{ background:var(--purple-lighter); color:var(--purple-dark); }
+  .modal .btn-primary{ background:var(--purple); color:#fff; }
+  .modal .btn-primary:hover{ background:var(--purple-dark); }
+  .modal .close-x{
+    position:absolute;top:12px;right:14px;background:none;border:none;
+    color:var(--sub);font-size:15px;cursor:pointer;padding:2px;
+  }
+
+  @media (max-width:900px){
+    .stat-row{ grid-template-columns:repeat(2,1fr); }
+    .main-grid{ grid-template-columns:1fr; }
+    .badge-grid{ grid-template-columns:repeat(3,1fr); }
+  }
+  @media (max-width:560px){
+    .badge-grid{ grid-template-columns:repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ===== PAGE HEADER ===== -->
+  <div class="page-head">
+    <h1>Activity Dashboard</h1>
+    <div class="dropdown-wrap">
+      <div class="dropdown" id="periodDropdown">
+        <span id="periodLabel">This Week</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M6 9L12 15L18 9" stroke="#1E1B33" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="dropdown-menu" id="periodMenu">
+        <div class="dropdown-item" data-value="Today">Today</div>
+        <div class="dropdown-item active" data-value="This Week">This Week</div>
+        <div class="dropdown-item" data-value="This Month">This Month</div>
+        <div class="dropdown-item" data-value="All Time">All Time</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== STAT CARDS ===== -->
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="num" id="statAttendance">96%</div>
+      <div class="lbl">Attendance · Average</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" id="statQuiz">81%</div>
+      <div class="lbl">Quiz Score · Average</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" id="statParticipation">78%</div>
+      <div class="lbl">Participation · Active</div>
+    </div>
+    <div class="stat-card">
+      <div class="num" id="statDoubts">24</div>
+      <div class="lbl">Doubts Posted · Total</div>
+    </div>
+  </div>
+
+  <!-- ===== ACTIVITY OVERVIEW + TOP STUDENTS ===== -->
+  <div class="main-grid">
+    <div class="panel">
+      <div class="panel-title">Activity Overview</div>
+      <div class="chart" id="chart"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Top Students</div>
+      <div id="topStudents">
+        
+    <div class="student-row">
+  <div class="rank">1</div>
+  <div class="info">
+    <div class="name">Aparna S</div>
+    <div class="xp">320 XP</div>
+  </div>
+</div>
+
+<div class="student-row">
+  <div class="rank">2</div>
+  <div class="info">
+    <div class="name">Rahul K</div>
+    <div class="xp">290 XP</div>
+  </div>
+</div>
+
+<div class="student-row">
+  <div class="rank">3</div>
+  <div class="info">
+    <div class="name">Priya R</div>
+    <div class="xp">250 XP</div>
+  </div>
+</div>
+      </div>
+      <button class="view-leaderboard">
+        View Leaderboard
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== ACHIEVEMENTS / BADGES ===== -->
+  <div class="panel">
+    <div class="achieve-head">
+      <div class="left">
+        <h2>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2L14.6 8.6L21.5 9.2L16.3 13.7L17.9 20.5L12 16.8L6.1 20.5L7.7 13.7L2.5 9.2L9.4 8.6L12 2Z" fill="#6C5CE7"/></svg>
+          Achievements
+        </h2>
+        <p>Badges claimed by student</p>
+      </div>
+      <div class="achieve-progress">
+        <div class="bar-track"><div class="bar-fill" id="barFill" style="width:0%"></div></div>
+        <span class="pct" id="statPct">0%</span>
+      </div>
+    </div>
+
+    <div class="badge-tabs" id="badgeTabs">
+      <button class="badge-tab active" data-filter="all">All <span class="count" id="cAll">0</span></button>
+      <button class="badge-tab" data-filter="claimed">Claimed <span class="count" id="cClaimed">0</span></button>
+      <button class="badge-tab" data-filter="unclaimed">Unclaimed <span class="count" id="cUnclaimed">0</span></button>
+      <button class="badge-tab" data-filter="locked">Locked <span class="count" id="cLocked">0</span></button>
+    </div>
+
+    <div class="badge-grid" id="badgeGrid"></div>
+  </div>
+
+</div>
+
+<!-- toast -->
+<div class="toast" id="toast">
+  <span class="dot">
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17L4 12" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </span>
+  <span id="toastText">Badge claimed!</span>
+</div>
+
+<!-- modal -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <button class="close-x" id="modalClose">✕</button>
+    <div class="badge-icon-wrap"><span id="modalIcon" style="font-size:32px;"></span></div>
+    <h3 id="modalName"></h3>
+    <p id="modalDesc"></p>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="modalCancel">Close</button>
+      <button class="btn-primary" id="modalClaim">Claim badge</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ================= ACTIVITY OVERVIEW CHART ================= */
+  const chartDataByPeriod = {
+    'Today':      [{ day:'8am', v:[30,20,15] },{ day:'10am', v:[50,35,20] },{ day:'12pm', v:[40,45,25] },{ day:'2pm', v:[65,40,30] },{ day:'4pm', v:[55,30,35] },{ day:'6pm', v:[35,25,15] }],
+    'This Week':  [{ day:'Mon', v:[70,55,40] },{ day:'Tue', v:[85,60,45] },{ day:'Wed', v:[60,80,35] },{ day:'Thu', v:[95,65,55] },{ day:'Fri', v:[75,50,60] },{ day:'Sat', v:[50,40,30] }],
+    'This Month': [{ day:'Wk1', v:[90,70,60] },{ day:'Wk2', v:[100,85,65] },{ day:'Wk3', v:[80,90,50] },{ day:'Wk4', v:[110,75,70] }],
+    'All Time':   [{ day:'Jan', v:[60,50,40] },{ day:'Feb', v:[75,60,45] },{ day:'Mar', v:[85,70,55] },{ day:'Apr', v:[95,80,60] },{ day:'May', v:[100,85,65] }],
+  };
+  const colors = ['#6C5CE7', '#FF7AB6', '#4FA8F5'];
+  const chartEl = document.getElementById('chart');
+
+  function renderChart(period){
+    chartEl.innerHTML = '';
+    const data = chartDataByPeriod[period];
+    data.forEach(d=>{
+      const col = document.createElement('div');
+      col.className = 'day';
+      const bars = document.createElement('div');
+      bars.className = 'bars';
+      d.v.forEach((val,i)=>{
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        bar.style.height = val + 'px';
+        bar.style.background = colors[i];
+        bars.appendChild(bar);
+      });
+      col.appendChild(bars);
+      const label = document.createElement('span');
+      label.textContent = d.day;
+      col.appendChild(label);
+      chartEl.appendChild(col);
+    });
+  }
+
+  /* ================= PER-PERIOD STAT CARDS ================= */
+  const periodStats = {
+    'Today':      { attendance: 98, quiz: 85, participation: 72, doubts: 4   },
+    'This Week':  { attendance: 96, quiz: 81, participation: 78, doubts: 24  },
+    'This Month': { attendance: 93, quiz: 79, participation: 74, doubts: 96  },
+    'All Time':   { attendance: 91, quiz: 77, participation: 70, doubts: 412 },
+  };
+
+  function updateStats(period){
+    const d = periodStats[period];
+    document.getElementById('statAttendance').textContent = d.attendance + '%';
+    document.getElementById('statQuiz').textContent = d.quiz + '%';
+    document.getElementById('statParticipation').textContent = d.participation + '%';
+    document.getElementById('statDoubts').textContent = d.doubts;
+    renderChart(period);
+  }
+
+  /* ================= "This Week" DROPDOWN ================= */
+  const periodDropdown = document.getElementById('periodDropdown');
+  const periodMenu = document.getElementById('periodMenu');
+  const periodLabel = document.getElementById('periodLabel');
+
+  periodDropdown.addEventListener('click', (e) => {
+    e.stopPropagation();
+    periodMenu.classList.toggle('open');
+  });
+
+  periodMenu.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const value = item.getAttribute('data-value');
+      periodLabel.textContent = value;
+      periodMenu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      periodMenu.classList.remove('open');
+      updateStats(value);
+    });
+  });
+
+  document.addEventListener('click', () => periodMenu.classList.remove('open'));
+
+  /* ================= ACHIEVEMENTS / BADGES ================= */
+  let badges = [
+    { id:1, icon:'🎯', name:'Normalization Novice', desc:'Completed the DBMS Normalization module', state:'earned-unclaimed', date:null },
+    { id:2, icon:'🔥', name:'7-Day Streak', desc:'Attended 7 classes in a row', state:'earned-claimed', date:'12 May 2026' },
+    { id:3, icon:'🧠', name:'Quiz Whiz', desc:'Scored 90%+ on 3 quizzes in a row', state:'earned-unclaimed', date:null },
+    { id:4, icon:'✋', name:'Curious Mind', desc:'Posted 10 doubts on the whiteboard', state:'earned-claimed', date:'08 May 2026' },
+    { id:5, icon:'🤝', name:'Team Player', desc:'Completed a group activity fully', state:'locked', date:null },
+  ];
+
+  let currentFilter = 'all';
+  let pendingClaimId = null;
+
+  const grid = document.getElementById('badgeGrid');
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toastText');
+  const modalBackdrop = document.getElementById('modalBackdrop');
+
+  function render(){
+    const earnedAll   = badges.filter(b=>b.state.startsWith('earned'));
+    const claimed      = badges.filter(b=>b.state==='earned-claimed');
+    const unclaimed     = badges.filter(b=>b.state==='earned-unclaimed');
+    const locked         = badges.filter(b=>b.state==='locked');
+
+    // progress bar = total earned (claimed + unclaimed) out of all badges
+    const pct = Math.round((earnedAll.length / badges.length) * 100);
+    document.getElementById('statPct').textContent = pct + '%';
+    document.getElementById('barFill').style.width = pct + '%';
+
+    document.getElementById('cAll').textContent = badges.length;
+    document.getElementById('cClaimed').textContent = claimed.length;
+    document.getElementById('cUnclaimed').textContent = unclaimed.length;
+    document.getElementById('cLocked').textContent = locked.length;
+
+    let list = badges;
+    if(currentFilter === 'claimed')   list = claimed;
+    if(currentFilter === 'unclaimed') list = unclaimed;
+    if(currentFilter === 'locked')    list = locked;
+
+    grid.innerHTML = '';
+
+    if(list.length === 0){
+      grid.innerHTML = `<div class="empty-state">No badges in this category yet.</div>`;
+      return;
+    }
+
+    list.forEach(b=>{
+      const isLocked = b.state === 'locked';
+      const card = document.createElement('div');
+      card.className = 'badge-card' + (isLocked ? ' locked' : '');
+
+      let footer = '';
+      if(b.state === 'earned-unclaimed'){
+        footer = `<button class="claim-btn" data-claim="${b.id}">Claim badge</button>`;
+      } else if(b.state === 'earned-claimed'){
+        footer = `<div class="earned-date">✓ Claimed · ${b.date}</div>`;
+      } else {
+        footer = `<div class="lock-note">🔒 Not yet earned</div>`;
+      }
+
+      card.innerHTML = `
+        ${b.state==='earned-unclaimed' ? '<span class="new-dot"></span>' : ''}
+        <div class="badge-icon-wrap"><span style="font-size:24px;">${b.icon}</span></div>
+        <div class="badge-name">${b.name}</div>
+        <div class="badge-desc">${b.desc}</div>
+        <div class="badge-foot">${footer}</div>
+      `;
+
+      card.addEventListener('click', (e)=>{
+        if(e.target.closest('[data-claim]')) return;
+        openModal(b);
+      });
+
+      grid.appendChild(card);
+    });
+
+    grid.querySelectorAll('[data-claim]').forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        claimBadge(parseInt(btn.getAttribute('data-claim')));
+      });
+    });
+  }
+
+  function claimBadge(id){
+    const badge = badges.find(b=>b.id===id);
+    if(!badge || badge.state !== 'earned-unclaimed') return;
+    badge.state = 'earned-claimed';
+    badge.date = new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+    showToast(`"${badge.name}" claimed! Check the "Claimed" tab.`);
+    render();
+  }
+
+  function showToast(msg){
+    toastText.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(()=> toast.classList.remove('show'), 2600);
+  }
+
+  function openModal(badge){
+    pendingClaimId = badge.id;
+    document.getElementById('modalIcon').textContent = badge.icon;
+    document.getElementById('modalName').textContent = badge.name;
+    let descLine = badge.desc;
+    if(badge.state === 'earned-claimed') descLine += ` — Claimed on ${badge.date}.`;
+    if(badge.state === 'locked') descLine += ' — Keep going to unlock this one.';
+    document.getElementById('modalDesc').textContent = descLine;
+
+    const claimBtn = document.getElementById('modalClaim');
+    claimBtn.style.display = (badge.state === 'earned-unclaimed') ? 'block' : 'none';
+    modalBackdrop.classList.add('show');
+  }
+  function closeModal(){
+    modalBackdrop.classList.remove('show');
+    pendingClaimId = null;
+  }
+
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('modalCancel').addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', (e)=>{ if(e.target === modalBackdrop) closeModal(); });
+  document.getElementById('modalClaim').addEventListener('click', ()=>{
+    if(pendingClaimId) claimBadge(pendingClaimId);
+    closeModal();
+  });
+
+  document.querySelectorAll('.badge-tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      document.querySelectorAll('.badge-tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      currentFilter = tab.getAttribute('data-filter');
+      render();
+    });
+  });
+
+  /* ================= INIT ================= */
+  renderChart('This Week');
+  render();
+</script>
+
+</body>
+</html>

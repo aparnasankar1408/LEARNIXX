@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Learnix - Notes & Resources</title>
+
+<style>
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f5f6fb;
+    color: #151726;
+    padding: 30px;
+}
+
+/* ================= PAGE ================= */
+
+.page {
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* ================= TOP TITLE ================= */
+
+.section-number {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 35px;
+}
+
+/* ================= NOTES HEADER ================= */
+
+.resources-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.resources-header h1 {
+    font-size: 28px;
+}
+
+/* ================= TABS ================= */
+
+.tabs {
+    display: flex;
+    gap: 35px;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.tab {
+    border: none;
+    background: transparent;
+    font-size: 16px;
+    font-weight: 600;
+    color: #222;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 8px;
+}
+
+.tab:hover {
+    color: #552be8;
+}
+
+.tab.active {
+    background: #eeeaff;
+    color: #552be8;
+}
+
+/* ================= RESOURCE GRID ================= */
+
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* ================= CARD ================= */
+
+.resource-card {
+    min-height: 250px;
+    background: white;
+    border: 1px solid #e2e4eb;
+    border-radius: 15px;
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    cursor: pointer;
+
+    transition: 0.25s ease;
+}
+
+.resource-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    border-color: #cfc8ff;
+}
+
+/* ================= PREVIEW ================= */
+
+.preview {
+    height: 130px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background: #fafbff;
+
+    margin-bottom: 15px;
+}
+
+/* ================= WHITEBOARD PREVIEW ================= */
+
+.whiteboard-preview {
+    position: relative;
+    width: 130px;
+    height: 95px;
+    background: white;
+    border: 1px solid #ddd;
+    overflow: hidden;
+}
+
+/* Grid */
+
+.whiteboard-preview::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        linear-gradient(#eee 1px, transparent 1px),
+        linear-gradient(90deg, #eee 1px, transparent 1px);
+
+    background-size: 15px 15px;
+}
+
+/* Simple diagram */
+
+.diagram-line {
+    position: absolute;
+    width: 60px;
+    height: 2px;
+    background: #777;
+    transform: rotate(-15deg);
+    top: 45px;
+    left: 35px;
+}
+
+.diagram-box {
+    position: absolute;
+    width: 25px;
+    height: 18px;
+    border: 1px solid #777;
+    background: white;
+}
+
+.box1 {
+    left: 15px;
+    top: 35px;
+}
+
+.box2 {
+    right: 12px;
+    top: 50px;
+}
+
+.box3 {
+    left: 48px;
+    bottom: 12px;
+}
+
+/* ================= FILE ICONS ================= */
+
+.file-icon {
+    width: 55px;
+    height: 65px;
+
+    border-radius: 6px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+
+    font-size: 13px;
+    font-weight: bold;
+
+    position: relative;
+}
+
+/* Notes */
+
+.notes-icon {
+    background: #7895ed;
+}
+
+.notes-icon::before {
+    content: "☰";
+    font-size: 28px;
+}
+
+/* PDF */
+
+.pdf-icon {
+    background: #ef3434;
+    font-size: 13px;
+}
+
+/* PPT */
+
+.ppt-icon {
+    background: #f36d21;
+    font-size: 13px;
+}
+
+/* ================= CARD DETAILS ================= */
+
+.resource-info {
+    margin-top: auto;
+}
+
+.resource-title {
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.resource-date {
+    font-size: 13px;
+    color: #777;
+}
+
+/* ================= UPLOAD CARD ================= */
+
+.upload-card {
+    border: 2px dashed #d7d9e5;
+    background: #fafbff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+.upload-card:hover {
+    border-color: #552be8;
+    background: #f8f6ff;
+}
+
+.upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.upload-plus {
+    font-size: 42px;
+    font-weight: 300;
+    color: #4d4f69;
+}
+
+.upload-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #444;
+}
+
+.upload-subtext {
+    font-size: 13px;
+    color: #888;
+}
+
+/* ================= FILTER ================= */
+
+.resource-card.hidden {
+    display: none;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px) {
+
+    .resources-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media(max-width:600px) {
+
+    body {
+        padding: 20px;
+    }
+
+    .resources-header h1 {
+        font-size: 22px;
+    }
+
+    .tabs {
+        gap: 8px;
+        overflow-x: auto;
+    }
+
+    .tab {
+        white-space: nowrap;
+    }
+
+    .resources-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+    <!-- ================= TITLE ================= -->
+
+    <div class="section-number">
+        12. NOTES &amp; RESOURCES
+    </div>
+
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="resources-header">
+
+        <h1>Notes &amp; Resources</h1>
+
+    </div>
+
+
+    <!-- ================= TABS ================= -->
+
+    <div class="tabs">
+
+        <button
+            class="tab active"
+            onclick="filterResources('all', this)">
+            All
+        </button>
+
+        <button
+            class="tab"
+            onclick="filterResources('whiteboard', this)">
+            Whiteboards
+        </button>
+
+        <button
+            class="tab"
+            onclick="filterResources('note', this)">
+            Notes
+        </button>
+
+        <button
+            class="tab"
+            onclick="filterResources('file', this)">
+            Files
+        </button>
+
+        <button
+            class="tab"
+            onclick="filterResources('link', this)">
+            Links
+        </button>
+
+    </div>
+
+
+    <!-- ================= RESOURCES ================= -->
+
+    <div class="resources-grid">
+
+
+        <!-- WHITEBOARD -->
+
+        <div class="resource-card"
+             data-type="whiteboard">
+
+            <div class="preview">
+
+                <div class="whiteboard-preview">
+
+                    <div class="diagram-line"></div>
+
+                    <div class="diagram-box box1"></div>
+                    <div class="diagram-box box2"></div>
+                    <div class="diagram-box box3"></div>
+
+                </div>
+
+            </div>
+
+            <div class="resource-info">
+
+                <div class="resource-title">
+                    Normalization<br>
+                    Whiteboard
+                </div>
+
+                <div class="resource-date">
+                    16 May 2025
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- NOTES -->
+
+        <div class="resource-card"
+             data-type="note">
+
+            <div class="preview">
+
+                <div class="file-icon notes-icon"></div>
+
+            </div>
+
+            <div class="resource-info">
+
+                <div class="resource-title">
+                    DBMS Class<br>
+                    Notes
+                </div>
+
+                <div class="resource-date">
+                    15 May 2025
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PDF -->
+
+        <div class="resource-card"
+             data-type="file">
+
+            <div class="preview">
+
+                <div class="file-icon pdf-icon">
+                    PDF
+                </div>
+
+            </div>
+
+            <div class="resource-info">
+
+                <div class="resource-title">
+                    Important SQL<br>
+                    Queries.pdf
+                </div>
+
+                <div class="resource-date">
+                    14 May 2025
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ER DIAGRAM -->
+
+        <div class="resource-card"
+             data-type="whiteboard">
+
+            <div class="preview">
+
+                <div class="whiteboard-preview">
+
+                    <div class="diagram-line"></div>
+
+                    <div class="diagram-box box1"></div>
+                    <div class="diagram-box box2"></div>
+                    <div class="diagram-box box3"></div>
+
+                </div>
+
+            </div>
+
+            <div class="resource-info">
+
+                <div class="resource-title">
+                    ER Diagram<br>
+                    Whiteboard
+                </div>
+
+                <div class="resource-date">
+                    14 May 2025
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PPT -->
+
+        <div class="resource-card"
+             data-type="file">
+
+            <div class="preview">
+
+                <div class="file-icon ppt-icon">
+                    PPT
+                </div>
+
+            </div>
+
+            <div class="resource-info">
+
+                <div class="resource-title">
+                    DBMS PPT<br>
+                    Slides.pptx
+                </div>
+
+                <div class="resource-date">
+                    13 May 2025
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- UPLOAD -->
+
+        <div class="resource-card upload-card"
+             onclick="uploadFile()">
+
+            <div class="upload-content">
+
+                <div class="upload-plus">
+                    +
+                </div>
+
+                <div class="upload-text">
+                    Upload<br>
+                    New File
+                </div>
+
+                <div class="upload-subtext">
+                    PDF, PPT, DOC, Images
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* ================= FILTER ================= */
+
+function filterResources(type, button) {
+
+    /* Remove active */
+
+    document.querySelectorAll(".tab").forEach(tab => {
+        tab.classList.remove("active");
+    });
+
+    /* Add active */
+
+    button.classList.add("active");
+
+    /* Get cards */
+
+    const cards =
+        document.querySelectorAll(
+            ".resource-card[data-type]"
+        );
+
+    cards.forEach(card => {
+
+        if(type === "all") {
+
+            card.classList.remove("hidden");
+
+        }
+
+        else if(card.dataset.type === type) {
+
+            card.classList.remove("hidden");
+
+        }
+
+        else {
+
+            card.classList.add("hidden");
+
+        }
+
+    });
+
+}
+
+
+/* ================= UPLOAD ================= */
+
+function uploadFile() {
+
+    const input =
+        document.createElement("input");
+
+    input.type = "file";
+
+    input.accept =
+        ".pdf,.ppt,.pptx,.doc,.docx,.png,.jpg,.jpeg";
+
+    input.click();
+
+    input.onchange = function() {
+
+        if(input.files.length > 0) {
+
+            alert(
+                "Selected file: " +
+                input.files[0].name
+            );
+
+        }
+
+    };
+
+}
+
+</script>
+
+</body>
+</html>

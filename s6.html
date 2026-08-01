@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Learnix - Classroom Lobby</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+
+        /* =========================================
+           RESET
+        ========================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", Arial, sans-serif;
+            background: #f7f8ff;
+            color: #171a3d;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+
+        /* =========================================
+           MAIN PAGE
+        ========================================= */
+
+        .page {
+            width: 100%;
+            min-height: 100vh;
+
+            padding: 24px 16px;
+
+            display: flex;
+            justify-content: center;
+        }
+
+
+        /* =========================================
+           MAIN CONTAINER
+        ========================================= */
+
+        .lobby-container {
+            width: 100%;
+            max-width: 680px;
+
+            min-height: 680px;
+
+            background: #ffffff;
+
+            border: 1px solid #e6e7f2;
+
+            border-radius: 15px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 4px 15px rgba(35, 37, 75, 0.06);
+
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        /* =========================================
+           PAGE TITLE
+        ========================================= */
+
+        .page-title {
+            padding: 20px 30px 17px;
+
+            border-bottom: 1px solid #eeeeee;
+
+            color: #1c2045;
+
+            font-size: 21px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================================
+           CLASS HEADER
+        ========================================= */
+
+        .class-header {
+            padding: 27px 30px 16px;
+
+            position: relative;
+        }
+
+        .class-title-row {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+
+        .class-name {
+            font-size: 22px;
+
+            font-weight: 700;
+
+            color: #171a3d;
+        }
+
+
+        /* =========================================
+           ROOM CODE
+        ========================================= */
+
+        .room-section {
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+        .room-code {
+            height: 34px;
+
+            padding: 0 13px;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 14px;
+
+            background: #ffffff;
+
+            border: 1px solid #e2e3ef;
+
+            border-radius: 18px;
+
+            color: #45486a;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            box-shadow:
+                0 1px 4px rgba(20, 25, 60, 0.05);
+        }
+
+        .copy-btn {
+            border: none;
+
+            background: transparent;
+
+            color: #575a76;
+
+            font-size: 11px;
+
+            font-weight: 500;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================
+           SUBTITLE
+        ========================================= */
+
+        .waiting-text {
+            margin-top: 12px;
+
+            color: #85879a;
+
+            font-size: 11px;
+        }
+
+        .dot {
+            margin: 0 8px;
+        }
+
+
+        /* =========================================
+           START SESSION BUTTON
+        ========================================= */
+
+        .start-session {
+            position: absolute;
+
+            right: 30px;
+
+            bottom: -2px;
+
+            border: none;
+
+            background: #513be5;
+
+            color: #ffffff;
+
+            height: 38px;
+
+            padding: 0 20px;
+
+            border-radius: 7px;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            box-shadow:
+                0 4px 10px rgba(81, 59, 229, 0.25);
+
+            transition: 0.2s;
+        }
+
+        .start-session:hover {
+            background: #412bcf;
+        }
+
+
+        /* =========================================
+           TABS
+        ========================================= */
+
+        .tabs {
+            margin-top: 28px;
+
+            padding: 0 30px;
+
+            height: 48px;
+
+            display: flex;
+
+            align-items: flex-end;
+
+            gap: 38px;
+
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .tab {
+            height: 48px;
+
+            padding: 0 4px;
+
+            border: none;
+
+            background: transparent;
+
+            color: #282b4d;
+
+            font-size: 11px;
+
+            font-weight: 500;
+
+            position: relative;
+        }
+
+        .tab.active {
+            color: #503ce6;
+
+            font-weight: 600;
+        }
+
+        .tab.active::after {
+            content: "";
+
+            position: absolute;
+
+            bottom: -1px;
+
+            left: 0;
+
+            right: 0;
+
+            height: 3px;
+
+            border-radius: 3px 3px 0 0;
+
+            background: #503ce6;
+        }
+
+
+        /* =========================================
+           CONTENT AREA
+        ========================================= */
+
+        .content-area {
+            flex: 1;
+
+            display: grid;
+
+            grid-template-columns: 1fr 190px;
+
+            gap: 20px;
+
+            padding: 17px 30px 25px;
+
+            min-height: 400px;
+        }
+
+
+        /* =========================================
+           STUDENT LIST
+        ========================================= */
+
+        .student-list {
+            width: 100%;
+        }
+
+
+        .student {
+            min-height: 68px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            border-bottom: 1px solid #eeeeee;
+
+            gap: 15px;
+        }
+
+
+        .student-details {
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+        }
+
+
+        /* =========================================
+           STUDENT IMAGE
+        ========================================= */
+
+        .student-avatar {
+            width: 37px;
+            height: 37px;
+
+            border-radius: 50%;
+
+            object-fit: cover;
+
+            border: 1px solid #e0e0e0;
+        }
+
+
+        /* =========================================
+           STUDENT TEXT
+        ========================================= */
+
+        .student-info h3 {
+            color: #303354;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            margin-bottom: 6px;
+        }
+
+        .student-info p {
+            color: #9799a9;
+
+            font-size: 9px;
+        }
+
+
+        /* =========================================
+           STATUS BUTTONS
+        ========================================= */
+
+        .status-btn {
+            min-width: 64px;
+
+            height: 27px;
+
+            border-radius: 6px;
+
+            font-size: 9px;
+
+            font-weight: 600;
+
+            border: none;
+        }
+
+
+        /* ADMITTED */
+
+        .admitted {
+            background: #e9f8df;
+
+            color: #4f9b3d;
+        }
+
+
+        /* ADMIT */
+
+        .admit {
+            background: #f9f8ff;
+
+            color: #5541e5;
+
+            border: 1px solid #dcd7ff;
+        }
+
+        .admit:hover {
+            background: #eeeaff;
+        }
+
+
+        /* =========================================
+           CLASS INFO
+        ========================================= */
+
+        .class-info {
+            background: #f7f7fc;
+
+            border: 1px solid #ececf4;
+
+            border-radius: 7px;
+
+            height: fit-content;
+
+            overflow: hidden;
+        }
+
+
+        .class-info-title {
+            padding: 17px 15px 13px;
+
+            color: #44476b;
+
+            font-size: 11px;
+
+            font-weight: 600;
+        }
+
+
+        .info-item {
+            padding: 13px 15px;
+
+            border-top: 1px solid #e6e6ef;
+        }
+
+        .info-item .label {
+            color: #606381;
+
+            font-size: 9px;
+
+            font-weight: 500;
+
+            margin-bottom: 7px;
+        }
+
+        .info-item .value {
+            color: #343756;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================================
+           BOTTOM ACTION BAR
+        ========================================= */
+
+        .bottom-bar {
+            height: 76px;
+
+            padding: 15px 30px;
+
+            border-top: 1px solid #eeeeee;
+
+            background: #ffffff;
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 14px;
+        }
+
+
+        .bottom-btn {
+            height: 45px;
+
+            border-radius: 8px;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 10px;
+        }
+
+
+        /* MUTE ALL */
+
+        .mute-all {
+            background: #ffffff;
+
+            color: #343750;
+
+            border: 1px solid #e1e2ed;
+        }
+
+        .mute-all:hover {
+            background: #f7f7fb;
+        }
+
+
+        /* ADMIT ALL */
+
+        .admit-all {
+            background: #513be5;
+
+            color: #ffffff;
+
+            border: 1px solid #513be5;
+
+            box-shadow:
+                0 4px 10px rgba(81, 59, 229, 0.20);
+        }
+
+        .admit-all:hover {
+            background: #422ed1;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 650px) {
+
+            .page {
+                padding: 0;
+            }
+
+            .lobby-container {
+                min-height: 100vh;
+
+                border-radius: 0;
+
+                border: none;
+            }
+
+            .page-title {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .class-header {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .class-title-row {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+            .start-session {
+                position: static;
+
+                margin-top: 15px;
+            }
+
+            .tabs {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .content-area {
+                grid-template-columns: 1fr;
+
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .class-info {
+                order: -1;
+            }
+
+            .bottom-bar {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+        }
+
+
+        @media (max-width: 430px) {
+
+            .page-title {
+                font-size: 18px;
+            }
+
+            .class-name {
+                font-size: 18px;
+            }
+
+            .room-section {
+                width: 100%;
+
+                justify-content: flex-start;
+            }
+
+            .tabs {
+                gap: 25px;
+            }
+
+            .student {
+                gap: 8px;
+            }
+
+            .student-info h3 {
+                font-size: 10px;
+            }
+
+            .student-info p {
+                font-size: 8px;
+            }
+
+            .student-avatar {
+                width: 34px;
+                height: 34px;
+            }
+
+            .status-btn {
+                min-width: 58px;
+            }
+
+            .bottom-bar {
+                grid-template-columns: 1fr 1fr;
+
+                gap: 8px;
+            }
+
+            .bottom-btn {
+                font-size: 9px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <div class="page">
+
+        <div class="lobby-container">
+
+
+            <!-- =========================================
+                 PAGE TITLE
+            ========================================== -->
+
+            <div class="page-title">
+                6. CLASSROOM LOBBY
+            </div>
+
+
+
+            <!-- =========================================
+                 CLASS HEADER
+            ========================================== -->
+
+            <div class="class-header">
+
+                <div class="class-title-row">
+
+                    <h1 class="class-name">
+                        DBMS - Normalization
+                    </h1>
+
+
+                    <div class="room-section">
+
+                        <div class="room-code">
+
+                            <span id="roomCode">
+                                KTA9B2
+                            </span>
+
+                            <button
+                                class="copy-btn"
+                                onclick="copyRoomCode()"
+                            >
+                                Copy
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <p class="waiting-text">
+
+                    Waiting room
+
+                    <span class="dot">•</span>
+
+                    Teacher can admit students
+
+                </p>
+
+
+                <button
+                    class="start-session"
+                    onclick="startSession()"
+                >
+
+                    Start Session
+
+                </button>
+
+            </div>
+
+
+
+            <!-- =========================================
+                 TABS
+            ========================================== -->
+
+            <div class="tabs">
+
+                <button
+                    class="tab active"
+                    onclick="showStudents()"
+                >
+
+                    Students (12)
+
+                </button>
+
+
+                <button
+                    class="tab"
+                    onclick="showRequests()"
+                >
+
+                    Requests (2)
+
+                </button>
+
+            </div>
+
+
+
+            <!-- =========================================
+                 CONTENT
+            ========================================== -->
+
+            <div class="content-area">
+
+
+                <!-- =====================================
+                     STUDENTS
+                ====================================== -->
+
+                <div class="student-list">
+
+
+                    <!-- STUDENT 1 -->
+
+                    <div class="student">
+
+                        <div class="student-details">
+
+                            <img
+                                class="student-avatar"
+                                src="https://i.pravatar.cc/100?img=47"
+                                alt="Aperna S"
+                            >
+
+                            <div class="student-info">
+
+                                <h3>
+                                    Aperna S
+                                </h3>
+
+                                <p>
+                                    Joined at 08:50 AM
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <button class="status-btn admitted">
+
+                            Admitted
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- STUDENT 2 -->
+
+                    <div class="student">
+
+                        <div class="student-details">
+
+                            <img
+                                class="student-avatar"
+                                src="https://i.pravatar.cc/100?img=12"
+                                alt="Rahul K"
+                            >
+
+                            <div class="student-info">
+
+                                <h3>
+                                    Rahul K
+                                </h3>
+
+                                <p>
+                                    Joined at 08:51 AM
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <button class="status-btn admitted">
+
+                            Admitted
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- STUDENT 3 -->
+
+                    <div class="student">
+
+                        <div class="student-details">
+
+                            <img
+                                class="student-avatar"
+                                src="https://i.pravatar.cc/100?img=44"
+                                alt="Priya R"
+                            >
+
+                            <div class="student-info">
+
+                                <h3>
+                                    Priya R
+                                </h3>
+
+                                <p>
+                                    Joined at 08:52 AM
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <button class="status-btn admitted">
+
+                            Admitted
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- STUDENT 4 -->
+
+                    <div class="student">
+
+                        <div class="student-details">
+
+                            <img
+                                class="student-avatar"
+                                src="https://i.pravatar.cc/100?img=11"
+                                alt="Akash M"
+                            >
+
+                            <div class="student-info">
+
+                                <h3>
+                                    Akash M
+                                </h3>
+
+                                <p>
+                                    Joined at 08:53 AM
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="status-btn admit"
+                            onclick="admitStudent(this)"
+                        >
+
+                            Admit
+
+                        </button>
+
+                    </div>
+
+
+
+                    <!-- STUDENT 5 -->
+
+                    <div class="student">
+
+                        <div class="student-details">
+
+                            <img
+                                class="student-avatar"
+                                src="https://i.pravatar.cc/100?img=49"
+                                alt="Balarithre O"
+                            >
+
+                            <div class="student-info">
+
+                                <h3>
+                                    Balarithre O
+                                </h3>
+
+                                <p>
+                                    Joined at 08:54 AM
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <button
+                            class="status-btn admit"
+                            onclick="admitStudent(this)"
+                        >
+
+                            Admit
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =====================================
+                     CLASS INFORMATION
+                ====================================== -->
+
+                <aside class="class-info">
+
+
+                    <div class="class-info-title">
+
+                        Class Info
+
+                    </div>
+
+
+                    <!-- SUBJECT -->
+
+                    <div class="info-item">
+
+                        <div class="label">
+                            Subject
+                        </div>
+
+                        <div class="value">
+                            DBMS
+                        </div>
+
+                    </div>
+
+
+                    <!-- DATE -->
+
+                    <div class="info-item">
+
+                        <div class="label">
+                            Date &amp; Time
+                        </div>
+
+                        <div class="value">
+                            15 May 2026, 09:00 AM
+                        </div>
+
+                    </div>
+
+
+                    <!-- DURATION -->
+
+                    <div class="info-item">
+
+                        <div class="label">
+                            Duration
+                        </div>
+
+                        <div class="value">
+                            1 Hour
+                        </div>
+
+                    </div>
+
+
+                    <!-- TEACHER -->
+
+                    <div class="info-item">
+
+                        <div class="label">
+                            Teacher
+                        </div>
+
+                        <div class="value">
+                            Aperna S
+                        </div>
+
+                    </div>
+
+                </aside>
+
+            </div>
+
+
+
+            <!-- =========================================
+                 BOTTOM BAR
+            ========================================== -->
+
+            <div class="bottom-bar">
+
+
+                <!-- MUTE ALL -->
+
+                <button
+                    class="bottom-btn mute-all"
+                    onclick="muteAll()"
+                >
+
+                    <i class="fa-solid fa-microphone-slash"></i>
+
+                    Mute All
+
+                </button>
+
+
+
+                <!-- ADMIT ALL -->
+
+                <button
+                    class="bottom-btn admit-all"
+                    onclick="admitAll()"
+                >
+
+                    <i class="fa-solid fa-user-check"></i>
+
+                    Admit All
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
+
+        /* =========================================
+           COPY ROOM CODE
+        ========================================== */
+
+        function copyRoomCode() {
+
+            const code =
+                document.getElementById("roomCode").innerText;
+
+            navigator.clipboard.writeText(code);
+
+            alert("Room code copied: " + code);
+        }
+
+
+
+        /* =========================================
+           ADMIT INDIVIDUAL STUDENT
+        ========================================== */
+
+        function admitStudent(button) {
+
+            button.innerText = "Admitted";
+
+            button.classList.remove("admit");
+
+            button.classList.add("admitted");
+
+            button.onclick = null;
+        }
+
+
+
+        /* =========================================
+           ADMIT ALL
+        ========================================== */
+
+        function admitAll() {
+
+            const buttons =
+                document.querySelectorAll(".status-btn.admit");
+
+            buttons.forEach(function(button) {
+
+                button.innerText = "Admitted";
+
+                button.classList.remove("admit");
+
+                button.classList.add("admitted");
+
+                button.onclick = null;
+
+            });
+
+            alert("All students have been admitted.");
+
+        }
+
+
+
+        /* =========================================
+           MUTE ALL
+        ========================================== */
+
+        function muteAll() {
+
+            alert("All students have been muted.");
+
+        }
+
+
+
+        /* =========================================
+           START SESSION
+        ========================================== */
+
+       function startSession() {
+    window.location.href = "s7.html";
+}
+
+
+        /* =========================================
+           TABS
+        ========================================== */
+
+        function showStudents() {
+
+            const tabs =
+                document.querySelectorAll(".tab");
+
+            tabs.forEach(function(tab) {
+                tab.classList.remove("active");
+            });
+
+            tabs[0].classList.add("active");
+
+        }
+
+
+        function showRequests() {
+
+            const tabs =
+                document.querySelectorAll(".tab");
+
+            tabs.forEach(function(tab) {
+                tab.classList.remove("active");
+            });
+
+            tabs[1].classList.add("active");
+
+            alert("2 student requests are waiting.");
+
+        }
+
+    </script>
+
+</body>
+</html>

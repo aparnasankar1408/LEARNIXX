@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Learnix - Create Classroom</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+
+        /* =========================
+           BASIC RESET
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", Arial, sans-serif;
+            background: #f6f7ff;
+            color: #20234d;
+        }
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            width: 132px;
+            height: 100vh;
+
+            background: #ffffff;
+
+            border-right: 1px solid #eeeeee;
+
+            display: flex;
+            flex-direction: column;
+
+            z-index: 1000;
+        }
+
+
+        /* LOGO */
+
+        .logo {
+            height: 58px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 5px;
+
+            color: #5048e8;
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .logo i {
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           NAVIGATION
+        ========================= */
+
+        .menu {
+            padding: 7px 6px;
+        }
+
+        .menu-item {
+            height: 35px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 0 10px;
+
+            margin-bottom: 5px;
+
+            text-decoration: none;
+
+            color: #25294e;
+
+            font-size: 8px;
+            font-weight: 500;
+
+            border-radius: 5px;
+
+            transition: 0.2s;
+        }
+
+        .menu-item i {
+            width: 12px;
+
+            text-align: center;
+
+            font-size: 10px;
+        }
+
+        .menu-item:hover {
+            background: #f0efff;
+            color: #5048e8;
+        }
+
+        .menu-item.active {
+            background: #5149df;
+            color: #ffffff;
+
+            box-shadow: 0 3px 8px rgba(81, 73, 223, 0.2);
+        }
+
+
+        /* =========================
+           SIDEBAR BOTTOM
+        ========================= */
+
+        .sidebar-bottom {
+            margin-top: auto;
+
+            padding: 8px 6px 12px;
+
+            border-top: 1px solid #eeeeee;
+        }
+
+
+        /* =========================
+           MAIN CONTENT
+        ========================= */
+
+        .main {
+            margin-left: 132px;
+
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           TOP BAR
+        ========================= */
+
+        .topbar {
+            height: 58px;
+
+            background: #ffffff;
+
+            border-bottom: 1px solid #eeeeee;
+
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+
+            padding: 0 20px;
+        }
+
+        .top-right {
+            display: flex;
+            align-items: center;
+
+            gap: 14px;
+        }
+
+
+        /* PLUS ICON */
+
+        .plus-button {
+            border: none;
+            background: transparent;
+
+            color: #5149df;
+
+            font-size: 14px;
+
+            cursor: pointer;
+        }
+
+
+        /* PROFILE */
+
+        .profile {
+            width: 24px;
+            height: 24px;
+
+            border-radius: 50%;
+
+            overflow: hidden;
+
+            border: 1px solid #dddddd;
+        }
+
+        .profile img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+
+        /* =========================
+           PAGE AREA
+        ========================= */
+
+        .content {
+            padding: 38px 47px;
+        }
+
+
+        /* PAGE TITLE */
+
+        .page-title {
+            color: #5049e5;
+
+            font-size: 10px;
+
+            font-weight: 600;
+
+            margin-bottom: 14px;
+        }
+
+
+        /* =========================
+           CLASSROOM CARD
+        ========================= */
+
+        .classroom-card {
+            width: 453px;
+
+            background: #ffffff;
+
+            border-radius: 7px;
+
+            padding: 20px;
+
+            box-shadow:
+                0 3px 12px rgba(30, 34, 70, 0.10);
+        }
+
+
+        /* =========================
+           CARD HEADER
+        ========================= */
+
+        .card-header {
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 12px;
+
+            margin-bottom: 15px;
+        }
+
+        .back-button {
+            border: none;
+
+            background: transparent;
+
+            cursor: pointer;
+
+            color: #171a3c;
+
+            font-size: 12px;
+
+            margin-top: 3px;
+        }
+
+        .card-header h1 {
+            font-size: 13px;
+
+            font-weight: 600;
+
+            color: #12153a;
+
+            margin-bottom: 3px;
+        }
+
+        .card-header p {
+            font-size: 8px;
+
+            color: #85879d;
+        }
+
+
+        /* =========================
+           FORM GROUP
+        ========================= */
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+
+            font-size: 8px;
+
+            font-weight: 500;
+
+            color: #262a53;
+
+            margin-bottom: 5px;
+        }
+
+
+        /* =========================
+           INPUTS
+        ========================= */
+
+        .form-control {
+            width: 100%;
+
+            height: 27px;
+
+            padding: 0 9px;
+
+            border: 1px solid #d9dbea;
+
+            border-radius: 5px;
+
+            background: #fafaff;
+
+            color: #35385e;
+
+            font-size: 8px;
+
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: #5b55e7;
+
+            box-shadow:
+                0 0 0 2px rgba(91, 85, 231, 0.08);
+        }
+
+
+        /* =========================
+           SELECT
+        ========================= */
+
+        .select-box {
+            position: relative;
+        }
+
+        .select-box select {
+            appearance: none;
+            -webkit-appearance: none;
+
+            cursor: pointer;
+
+            padding-right: 25px;
+        }
+
+        .select-arrow {
+            position: absolute;
+
+            right: 10px;
+
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            font-size: 7px;
+
+            color: #262a4c;
+
+            pointer-events: none;
+        }
+
+
+        /* =========================
+           DATE + TIME
+        ========================= */
+
+        .two-columns {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 12px;
+        }
+
+        input[type="date"] {
+            color: #34375d;
+
+            padding-right: 7px;
+        }
+
+
+        /* =========================
+           DURATION
+        ========================= */
+
+        .duration-row {
+            display: flex;
+
+            align-items: flex-end;
+
+            justify-content: space-between;
+
+            gap: 15px;
+        }
+
+        .duration-group {
+            width: 50%;
+        }
+
+
+        /* =========================
+           RECORDING
+        ========================= */
+
+        .recording-area {
+            height: 27px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: flex-end;
+
+            gap: 7px;
+        }
+
+        .recording-text {
+            font-size: 7px;
+
+            font-weight: 600;
+
+            color: #262950;
+        }
+
+
+        /* =========================
+           TOGGLE
+        ========================= */
+
+        .toggle {
+            position: relative;
+
+            display: inline-block;
+
+            width: 24px;
+            height: 13px;
+        }
+
+        .toggle input {
+            opacity: 0;
+
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            background: #d5d5df;
+
+            border-radius: 20px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        .toggle-slider::before {
+            content: "";
+
+            position: absolute;
+
+            width: 9px;
+            height: 9px;
+
+            left: 2px;
+            top: 2px;
+
+            background: #ffffff;
+
+            border-radius: 50%;
+
+            transition: 0.2s;
+        }
+
+        .toggle input:checked + .toggle-slider {
+            background: #554fe5;
+        }
+
+        .toggle input:checked + .toggle-slider::before {
+            transform: translateX(11px);
+        }
+
+
+        /* =========================
+           ROOM CODE
+        ========================= */
+
+        .room-code-box {
+            width: 100%;
+            height: 80px;
+
+            margin-top: 11px;
+            margin-bottom: 29px;
+
+            border: 1px solid #e0e0f7;
+
+            border-radius: 7px;
+
+            background: #f8f8ff;
+
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+            justify-content: center;
+        }
+
+        .room-label {
+            font-size: 7px;
+
+            color: #555879;
+
+            margin-bottom: 6px;
+        }
+
+        .room-code {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            font-size: 17px;
+
+            font-weight: 700;
+
+            letter-spacing: 2px;
+
+            color: #11143a;
+        }
+
+        .copy-button {
+            border: none;
+
+            background: transparent;
+
+            color: #514be4;
+
+            cursor: pointer;
+
+            font-size: 10px;
+        }
+
+        .room-expire {
+            margin-top: 5px;
+
+            color: #a1a2b6;
+
+            font-size: 6px;
+
+            font-style: italic;
+        }
+
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .button-row {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 8px;
+        }
+
+        .button {
+            height: 27px;
+
+            border-radius: 5px;
+
+            font-size: 8px;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        /* CANCEL */
+
+        .cancel-button {
+            border: 1px solid #625be7;
+
+            background: #ffffff;
+
+            color: #514be3;
+        }
+
+        .cancel-button:hover {
+            background: #f5f4ff;
+        }
+
+
+        /* CREATE */
+
+        .create-button {
+            border: 1px solid #5b55e5;
+
+            background: #5b55e5;
+
+            color: #ffffff;
+
+            box-shadow:
+                0 3px 6px rgba(91, 85, 229, 0.20);
+        }
+
+        .create-button:hover {
+            background: #4842d5;
+
+            border-color: #4842d5;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+                width: 65px;
+            }
+
+            .logo span {
+                display: none;
+            }
+
+            .menu-item span {
+                display: none;
+            }
+
+            .menu-item {
+                justify-content: center;
+
+                padding: 0;
+            }
+
+            .main {
+                margin-left: 65px;
+            }
+
+            .content {
+                padding: 25px 20px;
+            }
+
+            .classroom-card {
+                width: 100%;
+
+                max-width: 453px;
+            }
+        }
+
+
+        @media (max-width: 500px) {
+
+            .two-columns {
+                grid-template-columns: 1fr;
+
+                gap: 0;
+            }
+
+            .duration-row {
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .duration-group {
+                width: 100%;
+            }
+
+            .recording-area {
+                justify-content: flex-start;
+            }
+
+            .button-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <!-- LOGO -->
+        <div class="logo">
+
+            <i class="fa-solid fa-graduation-cap"></i>
+
+            <span>Learnix</span>
+
+        </div>
+
+
+        <!-- MENU -->
+        <nav class="menu">
+
+            <a href="#" class="menu-item">
+
+                <i class="fa-solid fa-table-cells-large"></i>
+
+                <span>Dashboard</span>
+
+            </a>
+
+
+            <a href="#" class="menu-item active">
+
+                <i class="fa-solid fa-book-open"></i>
+
+                <span>My Classes</span>
+
+            </a>
+
+
+            <a href="#" class="menu-item">
+
+                <i class="fa-regular fa-clipboard"></i>
+
+                <span>Whiteboards</span>
+
+            </a>
+
+
+            <a href="#" class="menu-item">
+
+                <i class="fa-regular fa-folder"></i>
+
+                <span>Resources</span>
+
+            </a>
+
+
+            <a href="#" class="menu-item">
+
+                <i class="fa-regular fa-chart-bar"></i>
+
+                <span>Analytics</span>
+
+            </a>
+
+
+            <a href="#" class="menu-item">
+
+                <i class="fa-regular fa-calendar"></i>
+
+                <span>Schedule</span>
+
+            </a>
+
+
+            <a href="#" class="menu-item">
+
+                <i class="fa-regular fa-bell"></i>
+
+                <span>Notifications</span>
+
+            </a>
+
+        </nav>
+
+
+        <!-- BOTTOM MENU -->
+
+        <div class="sidebar-bottom">
+
+            <a href="#" class="menu-item">
+
+                <i class="fa-solid fa-gear"></i>
+
+                <span>Settings</span>
+
+            </a>
+
+
+            <a href="#" class="menu-item">
+
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                <span>Logout</span>
+
+            </a>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN
+    ====================================================== -->
+
+    <main class="main">
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div class="top-right">
+
+                <button class="plus-button">
+
+                    <i class="fa-solid fa-circle-plus"></i>
+
+                </button>
+
+
+                <div class="profile">
+
+                    <img
+                        src="https://i.pravatar.cc/100?img=47"
+                        alt="Profile"
+                    >
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             CONTENT
+        ================================================== -->
+
+        <section class="content">
+
+
+            <!-- PAGE TITLE -->
+
+            <div class="page-title">
+
+                5. CREATE CLASSROOM
+
+            </div>
+
+
+
+            <!-- =================================================
+                 CLASSROOM CARD
+            ================================================== -->
+
+            <div class="classroom-card">
+
+
+                <!-- HEADER -->
+
+                <div class="card-header">
+
+                    <button class="back-button">
+
+                        <i class="fa-solid fa-arrow-left"></i>
+
+                    </button>
+
+
+                    <div>
+
+                        <h1>Create Classroom</h1>
+
+                        <p>
+                            Fill in the details to create a new class
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     FORM
+                ================================================== -->
+
+                <form id="classroomForm">
+
+
+                    <!-- CLASS NAME -->
+
+                    <div class="form-group">
+
+                        <label for="className">
+
+                            Class Name
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="className"
+                            class="form-control"
+                            value="DBMS - Normalization"
+                            placeholder="Enter class name"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <!-- SUBJECT -->
+
+                    <div class="form-group">
+
+                        <label for="subject">
+
+                            Subject
+
+                        </label>
+
+
+                        <div class="select-box">
+
+                            <select
+                                id="subject"
+                                class="form-control"
+                            >
+
+                                <option>
+                                    Database Management Systems
+                                </option>
+
+                                <option>
+                                    Data Structures
+                                </option>
+
+                                <option>
+                                    Operating Systems
+                                </option>
+
+                                <option>
+                                    Computer Networks
+                                </option>
+
+                                <option>
+                                    Web Development
+                                </option>
+
+                            </select>
+
+
+                            <i class="fa-solid fa-chevron-down select-arrow"></i>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- DATE + TIME -->
+
+                    <div class="two-columns">
+
+
+                        <!-- DATE -->
+
+                        <div class="form-group">
+
+                            <label for="date">
+
+                                Date
+
+                            </label>
+
+
+                            <input
+                                type="date"
+                                id="date"
+                                class="form-control"
+                                value="2026-05-15"
+                            >
+
+                        </div>
+
+
+
+                        <!-- TIME -->
+
+                        <div class="form-group">
+
+                            <label for="time">
+
+                                Time
+
+                            </label>
+
+
+                            <div class="select-box">
+
+                                <select
+                                    id="time"
+                                    class="form-control"
+                                >
+
+                                    <option>09:00 AM</option>
+
+                                    <option>10:00 AM</option>
+
+                                    <option>11:00 AM</option>
+
+                                    <option>12:00 PM</option>
+
+                                    <option>02:00 PM</option>
+
+                                    <option>04:00 PM</option>
+
+                                </select>
+
+
+                                <i class="fa-solid fa-chevron-down select-arrow"></i>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- DURATION + RECORDING -->
+
+                    <div class="duration-row">
+
+
+                        <!-- DURATION -->
+
+                        <div class="form-group duration-group">
+
+                            <label for="duration">
+
+                                Duration
+
+                            </label>
+
+
+                            <div class="select-box">
+
+                                <select
+                                    id="duration"
+                                    class="form-control"
+                                >
+
+                                    <option>1 Hour</option>
+
+                                    <option>30 Minutes</option>
+
+                                    <option>1.5 Hours</option>
+
+                                    <option>2 Hours</option>
+
+                                    <option>3 Hours</option>
+
+                                </select>
+
+
+                                <i class="fa-solid fa-chevron-down select-arrow"></i>
+
+                            </div>
+
+                        </div>
+
+
+
+                        <!-- RECORDING -->
+
+                        <div class="recording-area">
+
+                            <span class="recording-text">
+
+                                Allow Recording
+
+                            </span>
+
+
+                            <label class="toggle">
+
+                                <input
+                                    type="checkbox"
+                                    checked
+                                >
+
+                                <span class="toggle-slider"></span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         ROOM CODE
+                    ================================================== -->
+
+                    <div class="room-code-box">
+
+
+                        <div class="room-label">
+
+                            Room Code
+
+                        </div>
+
+
+                        <div class="room-code">
+
+                            <span id="roomCode">
+
+                                K7A9B2
+
+                            </span>
+
+
+                            <button
+                                type="button"
+                                class="copy-button"
+                                onclick="copyRoomCode()"
+                            >
+
+                                <i class="fa-regular fa-copy"></i>
+
+                            </button>
+
+                        </div>
+
+
+                        <p class="room-expire">
+
+                            This code will expire in 24 hours
+
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- =================================================
+                         BUTTONS
+                    ================================================== -->
+
+                    <div class="button-row">
+
+
+                        <button
+                            type="button"
+                            class="button cancel-button"
+                            onclick="cancelClass()"
+                        >
+
+                            Cancel
+
+                        </button>
+
+
+                        <button
+                            type="submit"
+                            class="button create-button"
+                        >
+
+                            Create &amp; Start Class
+
+                        </button>
+
+                    </div>
+
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+        /* ==========================================
+           COPY ROOM CODE
+        ========================================== */
+
+        function copyRoomCode() {
+
+            const code =
+                document.getElementById("roomCode").innerText;
+
+            navigator.clipboard.writeText(code);
+
+            alert("Room code copied: " + code);
+
+        }
+
+
+
+        /* ==========================================
+           CANCEL BUTTON
+        ========================================== */
+
+        function cancelClass() {
+
+            const result =
+                confirm("Are you sure you want to cancel?");
+
+            if (result) {
+
+                document.getElementById("classroomForm").reset();
+
+            }
+
+        }
+
+
+
+        /* ==========================================
+           CREATE CLASS
+        ========================================== */
+
+        document
+            .getElementById("classroomForm")
+            .addEventListener("submit", function(event) {
+
+                event.preventDefault();
+
+
+                const className =
+                    document.getElementById("className").value;
+
+                const subject =
+                    document.getElementById("subject").value;
+
+                const date =
+                    document.getElementById("date").value;
+
+                const time =
+                    document.getElementById("time").value;
+
+                const duration =
+                    document.getElementById("duration").value;
+
+
+                if (className.trim() === "") {
+
+                    alert("Please enter the class name.");
+
+                    return;
+
+                }
+
+
+                window.location.href = "s6.html";
+
+            });
+
+    </script>
+
+
+</body>
+</html>
