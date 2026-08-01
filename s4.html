@@ -39,7 +39,7 @@
     min-height:100vh;
   }
 
-  /* ================= SIDEBAR ================= */
+  
   .sidebar{
     background:var(--panel);
     border-right:1px solid var(--border);
@@ -102,7 +102,7 @@
 
   .sidebar-foot{ margin-top:auto; }
 
-  /* ================= MAIN ================= */
+  
   .main{ padding:30px 40px 60px; max-width:1400px; }
 
   .topbar{
@@ -161,7 +161,7 @@
     cursor:pointer;
   }
 
-  /* ---------- Join Classroom banner ---------- */
+
   .join-banner{
     background:linear-gradient(120deg,var(--purple),#8A6DF9);
     border-radius:18px;
@@ -205,7 +205,7 @@
   }
   .join-form button:hover{ background:#0C0D16; transform:translateY(-1px); }
 
-  /* ---------- stat cards ---------- */
+
   .stats{
     display:grid;
     grid-template-columns:repeat(3, 1fr);
@@ -239,7 +239,7 @@
   .stat-card .num{ font-size:28px; font-weight:800; letter-spacing:-.5px; }
   .stat-card .label{ font-size:13px; color:var(--gray); margin-top:2px; }
 
-  /* ---------- content grid ---------- */
+  
   .content-grid{
     display:grid;
     grid-template-columns: 1.7fr 1fr;
@@ -337,7 +337,7 @@
     to{ opacity:1; transform:translateY(0); }
   }
 
-  /* ---------- mobile ---------- */
+  
   .menu-toggle{
     display:none;
     width:38px; height:38px;
@@ -387,7 +387,7 @@
 
 <div class="app">
 
-  <!-- ================= SIDEBAR ================= -->
+  
   <aside class="sidebar" id="sidebar">
     <div class="brand">
       <div class="mark">
@@ -453,7 +453,7 @@
     </div>
   </aside>
 
-  <!-- ================= MAIN ================= -->
+  
   <main class="main">
 
     <div class="topbar">
@@ -476,7 +476,7 @@
       </div>
     </div>
 
-    <!-- ---------- Join Classroom banner ---------- -->
+
     <div class="join-banner">
       <div class="join-left">
         <h2>Join Classroom</h2>
@@ -488,7 +488,7 @@
       </form>
     </div>
 
-    <!-- ---------- stat cards ---------- -->
+
     <div class="stats">
       <div class="stat-card">
         <div class="stat-top">
@@ -521,10 +521,10 @@
       </div>
     </div>
 
-    <!-- ---------- content grid ---------- -->
+  
     <div class="content-grid">
 
-      <!-- Recent Classes -->
+    
       <div class="panel">
         <div class="panel-head">
           <h2>Recent Classes</h2>
@@ -581,7 +581,7 @@
         </div>
       </div>
 
-      <!-- Side panel: Announcements -->
+  
       <div class="side-panel">
         <div class="panel">
           <div class="panel-head">
@@ -686,7 +686,7 @@
 </div>
 
 <script>
-  // ---- Sidebar nav active state ----
+
   document.querySelectorAll('#mainNav .nav-item').forEach(item => {
     item.addEventListener('click', () => {
       document.querySelectorAll('#mainNav .nav-item').forEach(i => i.classList.remove('active'));
@@ -696,7 +696,7 @@
     });
   });
 
-  // ---- Mobile sidebar toggle ----
+  
   const sidebar = document.getElementById('sidebar');
   const menuToggle = document.getElementById('menuToggle');
   menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
@@ -710,7 +710,7 @@
     }
   });
 
-  // ---- Join classroom form ----
+ 
   const joinForm = document.getElementById('joinForm');
   const roomCode = document.getElementById('roomCode');
   joinForm.addEventListener('submit', (e) => {
@@ -718,22 +718,21 @@
     const code = roomCode.value.trim().toUpperCase();
     if (!code) return;
     console.log('Joining classroom with code:', code);
-    // window.location.href = `classroom.html?code=${code}`;
+  
     roomCode.value = '';
   });
 
-  // ---- Continue buttons ----
   document.querySelectorAll('.continue-link').forEach(btn => {
     btn.addEventListener('click', () => {
       console.log('Continue class:', btn.closest('.class-row').querySelector('.class-name').textContent);
     });
   });
 
-  // ---- Notification bell / avatar ----
+
   document.getElementById('bellBtn').addEventListener('click', () => console.log('Toggle notifications panel'));
   document.getElementById('avatarBtn').addEventListener('click', () => console.log('Open profile menu'));
 
-  // ---- Logout ----
+
   document.getElementById('logoutBtn').addEventListener('click', () => {
     console.log('Logging out...');
   });
